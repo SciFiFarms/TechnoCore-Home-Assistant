@@ -22,6 +22,9 @@ frontend:
 # Enables configuration UI
 config:
 
+# Enables python scripts as services ()
+#python_script:
+
 http:
   ssl_certificate: /run/secrets/ha_cert
   ssl_key: /run/secrets/ha_key
