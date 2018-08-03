@@ -1,5 +1,10 @@
 import homeassistant.loader as loader
 import json
+import ssl
+import socket
+import hashlib
+# TODO: Add logger
+ 
 
 # The domain of your component. Should be equal to the name of your component.
 DOMAIN = 'platformio'
@@ -29,6 +34,25 @@ def setup(hass, config):
     # Set the initial state.
     hass.states.set(entity_id, 'No messages')
 
+    def get_ssl_fingerprint(addr="mqtt"):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)
+        wrappedSocket = ssl.wrap_socket(sock)
+        
+        try:
+            wrappedSocket.connect((addr, 8883)) #8883: the secure MQTT port.
+        except:
+            response = False
+        else:
+            der_cert_bin = wrappedSocket.getpeercert(True)
+            pem_cert = ssl.DER_cert_to_PEM_cert(wrappedSocket.getpeercert(True))
+            print(pem_cert)
+
+            #Thumbprint
+            thumb_sha1 = hashlib.sha1(der_cert_bin).hexdigest()
+        wrappedSocket.close()
+        return thumb_sha1
+
     # Service to publish a message on MQTT.
     def build(call):
         """Service to send a message."""
@@ -37,7 +61,7 @@ def setup(hass, config):
         ssid = hass.states.get('input_text.ssid').state
         wifi_password = hass.states.get('input_text.wifi_password').state
         mqtt_host = hass.states.get('input_text.mqtt_host').state
-        ssl_fingerprint = hass.states.get('input_text.ssl_fingerprint').state
+        ssl_fingerprint = get_ssl_fingerprint()
 
         hal_config = {"name": "H.A.L. " + hal_id,
             "device_id": "hal" + hal_id,
