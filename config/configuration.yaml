@@ -91,6 +91,8 @@ mqtt:
   client_cert: /run/secrets/ha_cert
   username: !include /run/secrets/mqtt_username
   password: !include /run/secrets/mqtt_password
+  discovery: true
+  discovery_prefix: devices
 
 recorder:
   db_url: postgresql://homeassistant@ha_db/homeassistant?sslmode=require&sslcert=/run/secrets/ha_cert&sslkey=/run/secrets/ha_key&sslrootcert=/run/secrets/ca
