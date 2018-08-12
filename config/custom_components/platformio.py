@@ -83,6 +83,7 @@ def setup(hass, config):
                 "enabled": False
             },
             "settings": {
+                "dht22_pin": 2,
                 "percentage": 55
             }
         }
