@@ -81,7 +81,7 @@ tts:
 
 # Cloud
 cloud:
-
+ 
 group: !include groups.yaml
 automation: !include automations.yaml
 #script: !include scripts.yaml
@@ -123,6 +123,9 @@ input_boolean:
     name: Turn on to provision a new homie device.
     initial: off
     icon: mdi:chip
+
+homie:
+  discovery_prefix: hals
 
 platformio:
   #topic: platformio/build/nodemcuv2
