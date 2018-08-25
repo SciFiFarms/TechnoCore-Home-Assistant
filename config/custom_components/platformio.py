@@ -72,19 +72,18 @@ def setup(hass, config):
             "mqtt": {
                 "auth": True,
                 "host": mqtt_host,
-                "port": 8883,
+                "port": 1883,
                 "base_topic": "hals/",
                 "username": "$mqtt_username",
                 "password": "$mqtt_password",
-                "ssl": True,
+                "ssl": False,
                 "ssl_fingerprint": ssl_fingerprint 
             },
             "ota": {
                 "enabled": False
             },
             "settings": {
-                "dht22_pin": 2,
-                "percentage": 55
+                "dht22_pin": 4
             }
         }
         mqtt.publish("platformio/build/nodemcuv2", json.dumps(hal_config, sort_keys=True))
