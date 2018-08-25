@@ -88,6 +88,7 @@ script: !include scripts.yaml
 
 mqtt:
   broker: mqtt
+  client_id: home-assistant
   port: 8883
   certificate: /run/secrets/ca
   client_key: /run/secrets/ha_key
