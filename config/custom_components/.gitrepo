@@ -4,7 +4,7 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = https://github.com/SciFiFarms/HA_Homie.git
+	remote = git@github.com:SciFiFarms/HA_Homie.git
 	branch = master
 	commit = 2b1843e2902a957adf041ebbdcd0cfbf3add8337
 	parent = d4da09b727c167151b4956ffba14a658aef1b300
