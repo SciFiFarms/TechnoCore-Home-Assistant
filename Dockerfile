@@ -1,4 +1,4 @@
-FROM homeassistant/home-assistant
+FROM homeassistant/home-assistant:0.74.2
 #ARG userid
 #ARG username
 #RUN useradd --no-create-home --user-group --shell /bin/bash --uid $userid $username 

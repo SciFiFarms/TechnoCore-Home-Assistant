@@ -22,13 +22,16 @@ frontend:
 # Enables configuration UI
 config:
 
+# Enables python scripts as services ()
+#python_script:
+
 http:
   ssl_certificate: /run/secrets/ha_cert
   ssl_key: /run/secrets/ha_key
   # Secrets are defined in the file secrets.yaml
   # api_password: !secret http_password
   # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-  # base_url: example.duckdns.org:8123
+  base_url: ha:8123
 
 # Checks for available updates
 # Note: This component will send some information about your system to
@@ -85,12 +88,15 @@ script: !include scripts.yaml
 
 mqtt:
   broker: mqtt
+  client_id: home-assistant
   port: 8883
   certificate: /run/secrets/ca
   client_key: /run/secrets/ha_key
   client_cert: /run/secrets/ha_cert
   username: !include /run/secrets/mqtt_username
   password: !include /run/secrets/mqtt_password
+  discovery: true
+  discovery_prefix: devices
 
 recorder:
   db_url: postgresql://homeassistant@ha_db/homeassistant?sslmode=require&sslcert=/run/secrets/ha_cert&sslkey=/run/secrets/ha_key&sslrootcert=/run/secrets/ca
