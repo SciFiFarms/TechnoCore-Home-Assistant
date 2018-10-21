@@ -84,7 +84,11 @@ cloud:
 
 group: !include groups.yaml
 automation: !include automations.yaml
-script: !include scripts.yaml
+#script: !include scripts.yaml
+script:
+  build_esp:
+    sequence:
+      - service: platformio.build
 
 mqtt:
   broker: mqtt
@@ -100,3 +104,25 @@ mqtt:
 
 recorder:
   db_url: postgresql://homeassistant@ha_db/homeassistant?sslmode=require&sslcert=/run/secrets/ha_cert&sslkey=/run/secrets/ha_key&sslrootcert=/run/secrets/ca
+
+input_text:
+  id:
+    name: Device Id
+  ssid:
+    name: SSID
+  wifi_password:
+    name: Wifi Password
+    mode: password
+  ssl_fingerprint:
+    name: SSL Fingerprint
+  mqtt_host:
+    name: MQTT Host
+
+input_boolean:
+  create_homie:
+    name: Turn on to provision a new homie device.
+    initial: off
+    icon: mdi:chip
+
+platformio:
+  #topic: platformio/build/nodemcuv2
