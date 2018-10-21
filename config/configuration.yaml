@@ -103,8 +103,9 @@ mqtt:
   client_id: home-assistant
   port: 8883
   certificate: /run/secrets/ca
-  client_key: /run/secrets/ha_key
-  client_cert: /run/secrets/ha_cert
+  # One day I'd like to use client certificates for MQTT auth. 
+  #client_key: /run/secrets/ha_key
+  #client_cert: /run/secrets/ha_cert
   username: !include /run/secrets/mqtt_username
   password: !include /run/secrets/mqtt_password
   discovery: true
