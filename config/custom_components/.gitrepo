@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:SciFiFarms/HA_Homie.git
+	branch = master
+	commit = fce4c7340022f7d9b3f6fb2445685cc3d928beb0
+	parent = 3a785fa12b81bec8393c5a32496421e25009e62a
+	method = merge
+	cmdver = 0.4.0
