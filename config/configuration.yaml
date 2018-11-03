@@ -26,12 +26,12 @@ config:
 #python_script:
 
 http:
-  ssl_certificate: /run/secrets/ha_cert
-  ssl_key: /run/secrets/ha_key
+  ssl_certificate: /run/secrets/cert
+  ssl_key: /run/secrets/key
   # Secrets are defined in the file secrets.yaml
   # api_password: !secret http_password
   # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-  base_url: ha:8123
+  base_url: home_assistant:8123
 
 # Checks for available updates
 # Note: This component will send some information about your system to
@@ -104,15 +104,15 @@ mqtt:
   port: 8883
   certificate: /run/secrets/ca
   # One day I'd like to use client certificates for MQTT auth. 
-  #client_key: /run/secrets/ha_key
-  #client_cert: /run/secrets/ha_cert
+  #client_key: /run/secrets/key
+  #client_cert: /run/secrets/cert
   username: !include /run/secrets/mqtt_username
   password: !include /run/secrets/mqtt_password
   discovery: true
   discovery_prefix: devices
 
 recorder:
-  db_url: postgresql://homeassistant@ha_db/homeassistant?sslmode=require&sslcert=/run/secrets/ha_cert&sslkey=/run/secrets/ha_key&sslrootcert=/run/secrets/ca
+  db_url: postgresql://homeassistant@home_assistant_db/homeassistant?sslmode=require&sslcert=/run/secrets/cert&sslkey=/run/secrets/key&sslrootcert=/run/secrets/ca
 
 input_text:
   id:
