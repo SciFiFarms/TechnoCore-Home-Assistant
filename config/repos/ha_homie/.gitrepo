@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:SciFiFarms/HA_Homie.git
 	branch = master
-	commit = fce4c7340022f7d9b3f6fb2445685cc3d928beb0
-	parent = acaac654575d3f0e0609beb85725676e11451af1
+	commit = 15a6bc1c1afaff52ccfd10d62bd287628399ba3b
+	parent = 9b66e1c8609b1b945f1a3a307ca8e45676512b24
 	method = merge
 	cmdver = 0.4.0
