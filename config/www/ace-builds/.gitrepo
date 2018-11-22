@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:ajaxorg/ace-builds.git
+	branch = gh-pages
+	commit = 0d62c26de7b2e1922d8dd95ba587c9845c018c51
+	parent = 96369870200c933ebeb5affe7aee87d3423d9f10
+	method = merge
+	cmdver = 0.4.0
