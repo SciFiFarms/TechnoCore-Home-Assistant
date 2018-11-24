@@ -57,11 +57,13 @@ logbook:
 # TODO: This should probably be turned to plain info in production. 
 # It would be nice to set these via ENV var. 
 logger:
-  default: warn
+  default: info
   logs:
     custom_components.homie: debug
     custom_components: debug
     homeassistant.bootstrap: info
+    homeassistant.components.mqtt: debug
+    frontend.js: debug
 # Enables a map showing the location of tracked devices
 map:
 
