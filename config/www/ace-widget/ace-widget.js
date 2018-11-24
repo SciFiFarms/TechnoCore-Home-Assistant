@@ -17,12 +17,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 /* globals ace */
 /* eslint new-cap: ["error", { "capIsNewExceptions": ["AceWidgetShadowDom"] }] */
 
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 
-
-import 'ace-builds/src-noconflict/ace.js';
-import 'ace-builds/src-noconflict/ext-language_tools.js';
-import 'ace-builds/src-noconflict/snippets/snippets.js';
+import '/local/ace-builds/src-noconflict/ace.js';
+import '/local/ace-builds/src-noconflict/ext-language_tools.js';
+import '/local/ace-builds/src-noconflict/snippets/snippets.js';
 
 
 var editorFocus = function() { 
@@ -37,9 +35,9 @@ var editorFocus = function() {
 
 
 
-class AceWidget extends PolymerElement {
+class AceWidget extends Polymer.Element {
   static get template() {
-    return html`
+    return Polymer.html`
       <style>
         :host {
           display: block;
@@ -138,7 +136,7 @@ class AceWidget extends PolymerElement {
       },
       baseUrl: {
         type: String,
-        value: '',
+        value: '/local/ace-builds/src-noconflict/',
       },
     };
   }
@@ -161,12 +159,14 @@ class AceWidget extends PolymerElement {
     // In non-minified mode, imports are parallelized, and sometimes `ext-language_tools.js` and
     // `snippets.js` arrive before `ace.js` is ready. I am adding some tests here with dynamic imports 
     // to fix thaty
+    /* importing causes an error. 
     if (!ace) {
-      await import(`${baseUrl}ace.js`);
+      await import(baseUrl + "ace.js" );
     }
     if (!ace.require("ace/ext/language_tools")) {
       await import(`${baseUrl}ext-language_tools.js`);
     }
+    */
     
     // console.debug("[ace-widget] connectedCallback")
     let div = this.$.editor;
