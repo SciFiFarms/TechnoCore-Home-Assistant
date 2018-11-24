@@ -9,6 +9,8 @@ import functools
 import homeassistant.components.mqtt as mqtt
 from homeassistant.components.mqtt import (CONF_DISCOVERY_PREFIX, CONF_QOS, valid_subscribe_topic, _VALID_QOS_SCHEMA)
 from homeassistant.helpers.discovery import (async_load_platform)
+from homeassistant.helpers.entity import (Entity)
+from homeassistant.helpers.entity_component import EntityComponent
 from homeassistant.helpers.event import (async_track_time_interval)
 from homeassistant.helpers import (config_validation as cv)
 from homeassistant.const import (EVENT_HOMEASSISTANT_STOP, STATE_UNKNOWN)
@@ -32,6 +34,7 @@ DEFAULT_DISCOVERY_PREFIX = 'homie'
 DEFAULT_QOS = 1
 KEY_HOMIE_ALREADY_DISCOVERED = 'KEY_HOMIE_ALREADY_DISCOVERED'
 KEY_HOMIE_ENTITY_NAME = 'KEY_HOMIE_ENTITY_ID'
+GROUP_NAME_ALL_HALS = 'all hals'
 
 # CONFIg
 CONFIG_SCHEMA = vol.Schema({
@@ -58,6 +61,8 @@ async def async_setup(hass: HomeAssistantType, config: ConfigType):
     # Init
     _DEVICES = dict()
     hass.data[KEY_HOMIE_ALREADY_DISCOVERED] = dict()
+    component = EntityComponent(
+        _LOGGER, DOMAIN, hass, group_name=GROUP_NAME_ALL_HALS)
 
     # Config
     conf = config.get(DOMAIN)
@@ -74,6 +79,7 @@ async def async_setup(hass: HomeAssistantType, config: ConfigType):
 
     # Sart
     async def async_start():
+        # TODO: Should only need to subscribe once. It looks like I'm subscribing twice.
         await mqtt.async_subscribe(hass, f'{discovery_prefix}/+/$homie', async_discover_message_received, qos)
 
     async def async_discover_message_received(topic: str, payload: str, msg_qos: int):
@@ -94,7 +100,7 @@ async def async_setup(hass: HomeAssistantType, config: ConfigType):
             await async_setup_node(component)
 
     async def async_setup_device(device: HomieDevice):
-        pass
+        await component.async_add_entities([device])
 
     async def async_setup_node(node: HomieNode):
         def get_entity_name():
@@ -113,7 +119,7 @@ async def async_setup(hass: HomeAssistantType, config: ConfigType):
     return True
 
 # Types
-class ChangeListener(object):
+class ChangeListener(Entity):
     def __init__(self):
         super().__init__()
         self._listeners = list()
@@ -148,6 +154,7 @@ class HomieDevice(ChangeListener):
         self._fw_version = STATE_UNKNOWN
         self._fw_checksum = STATE_UNKNOWN
         self._implementation = STATE_UNKNOWN
+        self._config = STATE_UNKNOWN
         
     async def _async_setup(self, hass:HomeAssistantType, qos: int):
         async def async_discover_message_received(topic: str, payload: str, msg_qos: int):
@@ -185,10 +192,33 @@ class HomieDevice(ChangeListener):
 
         # Load Implementation Properties
         if topic == '/$implementation': self._implementation = payload
+        if topic == '/$implementation/config': self._config = payload
         
         # Ready
         if topic == '/$online' and self.online:
             await self._on_component_ready(self)
+
+    @property
+    def state(self):
+        """Return the state of the device."""
+        return self._online
+
+    @property
+    def state_attributes(self):
+        """Return the attributes of the entity."""
+        # return self._attributes
+        return {
+            'implementation': self._implementation,
+            'config': self._config,
+            'device_id': self._device_id
+        }
+        """Return the state of the device."""
+        #return self._online
+
+    @property
+    def config(self):
+        """Return the config of the device."""
+        return self._config
 
     @property
     def base_topic(self):
@@ -199,6 +229,11 @@ class HomieDevice(ChangeListener):
     def device_id(self):
         """Return the Device ID of the device."""
         return self._device_id
+
+    @property
+    def entity_id(self):
+        """Return the Device ID of the device."""
+        return DOMAIN + "." + self._device_id
 
     @property
     def name(self):
