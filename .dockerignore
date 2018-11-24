@@ -1,3 +1,6 @@
+config/.storage
+src/
+front-end/
 # General files
 .git
 .github
