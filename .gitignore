@@ -1,6 +1,9 @@
 config/.HA_VERSION
 config/.uuid
 config/home-assistant.log
+config/.storage
+src/
+front-end/
 *.pyc
 #config/*
 

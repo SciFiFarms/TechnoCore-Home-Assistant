@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/SciFiFarms/ace-widget.git
+	branch = master
+	commit = 41236122d46941488a16b8eac223153f0560c14f
+	parent = 5f29c115d818a974e935fa1103d04f0ba4c40739
+	method = merge
+	cmdver = 0.4.0
