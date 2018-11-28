@@ -83,7 +83,6 @@ def setup(hass, config):
                 "enabled": False
             },
             "settings": {
-                "dht22_pin": 4
             }
         }
         mqtt.publish("platformio/build/nodemcuv2", json.dumps(hal_config, sort_keys=True))
