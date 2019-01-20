@@ -1,4 +1,4 @@
-FROM homeassistant/home-assistant:0.82.0
+FROM homeassistant/home-assistant:0.85.1
 RUN apt-get update && apt-get install -y mosquitto-clients
 
 # This should be 4.1.something now.
@@ -14,5 +14,4 @@ ENTRYPOINT ["go-init"]
 #CMD ["-pre", "entrypoint.sh", "-main", "python -m ptvsd --host 0.0.0.0 --port 5678 -m homeassistant --config /config ", "-post", "exitpoint.sh"]
 CMD ["-pre", "entrypoint.sh", "-main", "python -m homeassistant --config /config ", "-post", "exitpoint.sh"]
 
-# TODO: Need to prevent start until MQTT is up:
-# https://docs.docker.com/compose/startup-order/
+RUN mkdir /config/.storage/ 
