@@ -13,6 +13,30 @@ homeassistant:
   # Customization file
   customize: !include customize.yaml
 
+panel_iframe:
+  # If you want to use a new $HOSTNAME_SERVICE_NAME here, you can generate them in entrypoint.sh. Actually, use env set in docker-composey.yml
+  esphomeyaml_frame:
+    # A prepended space causes this to sort to the top of the list and then gets trimmed out. 
+    title: ' esphomeyaml'
+    url: !env_var HOSTNAME_ESPHOMEYAML_URL
+    icon: mdi:home-automation
+  node_red_frame:
+    title: 'Node-RED'
+    url: !env_var HOSTNAME_NODE_RED_URL
+    icon: mdi:resistor-nodes
+  portainer_frame:
+    title: 'Portainer'
+    url: !env_var HOSTNAME_PORTAINER_URL
+    icon: mdi:docker
+  docs_frame:
+    title: 'Documentation'
+    url: !env_var HOSTNAME_DOCS_URL
+    icon: mdi:book-open-variant
+  router_frame:
+    title: 'Router'
+    url: 'https://192.168.1.1'
+    icon: mdi:access-point-network
+
 # Show links to resources in log and frontend
 introduction:
 
@@ -99,4 +123,3 @@ mqtt:
 
 recorder:
   db_url: postgresql://homeassistant@home_assistant_db/homeassistant?sslmode=require&sslcert=/run/secrets/cert&sslkey=/run/secrets/key&sslrootcert=/run/secrets/ca
-
