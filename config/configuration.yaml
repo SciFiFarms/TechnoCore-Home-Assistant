@@ -73,17 +73,6 @@ sun:
 # Weather prediction
 sensor:
   - platform: yr
-  - platform: mqtt
-    name: "Humidity"
-    state_topic: "planteyes/pe001/humidity/relative"
-    unit_of_measurement: "%"
-    #value_template: '{{ value_json.humid }}'
-  - platform: mqtt
-    name: "Temp"
-    state_topic: "planteyes/pe001/temperature/degrees"
-    unit_of_measurement: "c"
-    #value_template: '{{ value_json.temp }}'
-
 
 # Text to speech
 tts:
@@ -94,11 +83,6 @@ cloud:
  
 group: !include groups.yaml
 automation: !include automations.yaml
-#script: !include scripts.yaml
-script:
-  build_esp:
-    sequence:
-      - service: platformio.build
 
 mqtt:
   broker: mqtt
@@ -111,32 +95,8 @@ mqtt:
   username: !include /run/secrets/mqtt_username
   password: !include /run/secrets/mqtt_password
   discovery: true
-  discovery_prefix: devices
+  #discovery_prefix: devices
 
 recorder:
   db_url: postgresql://homeassistant@home_assistant_db/homeassistant?sslmode=require&sslcert=/run/secrets/cert&sslkey=/run/secrets/key&sslrootcert=/run/secrets/ca
 
-input_text:
-  id:
-    name: Device Id
-  ssid:
-    name: SSID
-  wifi_password:
-    name: Wifi Password
-    mode: password
-  ssl_fingerprint:
-    name: SSL Fingerprint
-  mqtt_host:
-    name: MQTT Host
-
-input_boolean:
-  create_homie:
-    name: Turn on to provision a new homie device.
-    initial: off
-    icon: mdi:chip
-
-homie:
-  discovery_prefix: hals
-
-platformio:
-  #topic: platformio/build/nodemcuv2
