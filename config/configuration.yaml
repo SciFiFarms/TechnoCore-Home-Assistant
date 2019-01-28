@@ -13,6 +13,7 @@ homeassistant:
   # Customization file
   customize: !include customize.yaml
 
+# For more information about using panel_iframe, see: https://www.home-assistant.io/components/panel_iframe/ 
 panel_iframe:
   # If you want to use a new $HOSTNAME_SERVICE_NAME here, you can generate them in entrypoint.sh. Actually, use env set in docker-composey.yml
   esphomeyaml_frame:
