@@ -15,23 +15,23 @@ homeassistant:
 
 # For more information about using panel_iframe, see: https://www.home-assistant.io/components/panel_iframe/ 
 panel_iframe:
-  # If you want to use a new $HOSTNAME_SERVICE_NAME here, you can generate them in entrypoint.sh. Actually, use env set in docker-composey.yml
+  # If you want to add a $SERVICE_NAME here, you can generate them in entrypoint.sh. 
   esphomeyaml_frame:
     # A prepended space causes this to sort to the top of the list and then gets trimmed out. 
     title: ' esphomeyaml'
-    url: !env_var HOSTNAME_ESPHOMEYAML_URL
+    url: !include /run/frames/esphomeyaml
     icon: mdi:home-automation
   node_red_frame:
     title: 'Node-RED'
-    url: !env_var HOSTNAME_NODE_RED_URL
+    url: !include /run/frames/node_red
     icon: mdi:resistor-nodes
   portainer_frame:
     title: 'Portainer'
-    url: !env_var HOSTNAME_PORTAINER_URL
+    url: !include /run/frames/portainer
     icon: mdi:docker
   docs_frame:
     title: 'Documentation'
-    url: !env_var HOSTNAME_DOCS_URL
+    url: !include /run/frames/docs
     icon: mdi:book-open-variant
   router_frame:
     title: 'Router'
