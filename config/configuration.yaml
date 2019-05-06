@@ -21,10 +21,26 @@ panel_iframe:
     title: ' esphomeyaml'
     url: !include /run/frames/esphomeyaml
     icon: mdi:home-automation
+  grafana_frame:
+    title: 'Grafana'
+    url: !include /run/frames/grafana
+    icon: mdi:chart-areaspline
   node_red_frame:
     title: 'Node-RED'
     url: !include /run/frames/node_red
     icon: mdi:resistor-nodes
+  jupyter_frame:
+    title: 'Jupyter'
+    url: !include /run/frames/jupyter
+    icon: mdi:microscope
+  logs_frame:
+    title: 'Logs'
+    url: !include /run/frames/logs
+    icon: mdi:file-cabinet
+  status_frame:
+    title: 'Prometheus'
+    url: !include /run/frames/status
+    icon: mdi:server
   portainer_frame:
     title: 'Portainer'
     url: !include /run/frames/portainer
@@ -88,7 +104,7 @@ logger:
     custom_components.homie: debug
     custom_components: debug
     homeassistant.bootstrap: info
-    homeassistant.components.mqtt: debug
+    homeassistant.components.mqtt: info
     frontend.js: debug
 # Enables a map showing the location of tracked devices
 map:
