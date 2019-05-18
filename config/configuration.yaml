@@ -136,6 +136,20 @@ mqtt:
   discovery: true
   #discovery_prefix: devices
 
+automation:
+  # Set default theme. 
+  # TODO: A better way to accomplish this is by creating an actual setting.
+  # I may be able to get it to remember last setting: https://community.home-assistant.io/t/make-a-theme-stay-after-reboot-broke-again/106751/17
+  - alias: 'System - Set Custom Theme at Startup'
+    initial_state: 'true'
+    trigger:
+      platform: homeassistant
+      event: start
+    action:
+      service: frontend.set_theme
+      data:
+        name: slate
+
 recorder:
   db_url: postgresql://home_assistant@home_assistant_db/home_assistant?sslmode=require&sslcert=/run/secrets/cert_bundle&sslkey=/run/secrets/key&sslrootcert=/run/secrets/ca
 
