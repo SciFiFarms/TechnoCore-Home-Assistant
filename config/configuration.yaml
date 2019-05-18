@@ -54,9 +54,6 @@ panel_iframe:
     url: 'https://192.168.1.1'
     icon: mdi:access-point-network
 
-# Show links to resources in log and frontend
-introduction:
-
 # Enables the frontend
 frontend:
   themes: !include themes.yaml
@@ -140,4 +137,9 @@ mqtt:
   #discovery_prefix: devices
 
 recorder:
-  db_url: postgresql://homeassistant@home_assistant_db/homeassistant?sslmode=require&sslcert=/run/secrets/cert_bundle&sslkey=/run/secrets/key&sslrootcert=/run/secrets/ca
+  db_url: postgresql://home_assistant@home_assistant_db/home_assistant?sslmode=require&sslcert=/run/secrets/cert_bundle&sslkey=/run/secrets/key&sslrootcert=/run/secrets/ca
+
+influxdb:
+  username: !include /run/secrets/timeseries_db_username
+  password: !include /run/secrets/timeseries_db_password
+  host: timeseries_db
