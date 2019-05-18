@@ -39,7 +39,7 @@ panel_iframe:
     icon: mdi:file-cabinet
   status_frame:
     title: 'Prometheus'
-    url: !include /run/frames/status
+    url: !include /run/frames/health
     icon: mdi:server
   portainer_frame:
     title: 'Portainer'
