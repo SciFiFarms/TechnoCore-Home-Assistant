@@ -22,7 +22,7 @@ panel_iframe:
     url: !include /run/frames/esphomeyaml
     icon: mdi:home-automation
   grafana_frame:
-    title: 'Graphs: Grafana'
+    title: ' Graphs: Grafana'
     url: !include /run/frames/grafana
     icon: mdi:chart-areaspline
   node_red_frame:
