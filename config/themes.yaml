@@ -15,6 +15,9 @@ slate:
     # Background colors
     primary-background-color: '#222222'
     secondary-background-color: '#222222'
+    # TODO: Add this background to lovelace. It currently needs to be added 
+    #       by hand to lovelace.yaml. https://community.home-assistant.io/t/background-image-in-theme/81486/12
+    background-image: center / cover no-repeat url("/local/bg/space.jpg") fixed
     divider-color: 'rgba(0, 0, 0, .12)'
     table-row-background-color: '#292929'
     table-row-alternative-background-color: '#292929'

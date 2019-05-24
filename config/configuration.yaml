@@ -18,23 +18,23 @@ panel_iframe:
   # If you want to add a $SERVICE_NAME here, you can generate them in entrypoint.sh. 
   esphomeyaml_frame:
     # A prepended space causes this to sort to the top of the list and then gets trimmed out. 
-    title: ' esphomeyaml'
+    title: ' ESPHome'
     url: !include /run/frames/esphomeyaml
     icon: mdi:home-automation
   grafana_frame:
-    title: 'Grafana'
+    title: 'Graphs: Grafana'
     url: !include /run/frames/grafana
     icon: mdi:chart-areaspline
   node_red_frame:
-    title: 'Node-RED'
+    title: 'Automation: Node-RED'
     url: !include /run/frames/node_red
     icon: mdi:resistor-nodes
   jupyter_frame:
-    title: 'Jupyter'
+    title: 'Data-Science: Jupyter'
     url: !include /run/frames/jupyter
     icon: mdi:microscope
   logs_frame:
-    title: 'Logs'
+    title: 'Logs: Portainer'
     url: !include /run/frames/logs
     icon: mdi:file-cabinet
   status_frame:
@@ -51,6 +51,7 @@ panel_iframe:
     icon: mdi:book-open-variant
   router_frame:
     title: 'Router'
+    # TODO: It would be better to detect this.
     url: 'https://192.168.1.1'
     icon: mdi:access-point-network
 
@@ -104,7 +105,7 @@ logger:
     homeassistant.components.mqtt: info
     frontend.js: debug
 # Enables a map showing the location of tracked devices
-map:
+#map:
 
 # Track the sun
 sun:
@@ -138,6 +139,8 @@ mqtt:
 
 recorder:
   db_url: postgresql://home_assistant@home_assistant_db/home_assistant?sslmode=require&sslcert=/run/secrets/cert_bundle&sslkey=/run/secrets/key&sslrootcert=/run/secrets/ca
+ 
+prometheus:
 
 influxdb:
   username: !include /run/secrets/timeseries_db_username
