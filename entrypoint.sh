@@ -14,7 +14,7 @@ do
 done
 
 mkdir /run/frames
-echo "https://$(cat /run/secrets/domain):6052" > /run/frames/esphomeyaml
+echo "https://$(cat /run/secrets/domain):6052" > /run/frames/esphome
 echo "https://$(cat /run/secrets/domain)/docs" > /run/frames/docs
 echo "https://$(cat /run/secrets/domain)/node_red" > /run/frames/node_red
 echo "https://$(cat /run/secrets/domain)/portainer" > /run/frames/portainer

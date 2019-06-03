@@ -16,12 +16,12 @@ homeassistant:
 # For more information about using panel_iframe, see: https://www.home-assistant.io/components/panel_iframe/ 
 panel_iframe:
   # If you want to add a $SERVICE_NAME here, you can generate them in entrypoint.sh. 
-  esphomeyaml_frame:
+  esphome_frame:
     # A prepended space causes this to sort to the top of the list and then gets trimmed out. 
     # In order to assign the desired order, I put them in the order I wanted, 
     # and then started at the bottom adding 1 more space than what was lower.
     title: '        ESPHome'
-    url: !include /run/frames/esphomeyaml
+    url: !include /run/frames/esphome
     icon: mdi:home-automation
   grafana_frame:
     title: '       Graphs: Grafana'
