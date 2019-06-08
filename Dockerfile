@@ -1,4 +1,4 @@
-FROM homeassistant/home-assistant:0.88.1
+FROM homeassistant/home-assistant:0.93.2
 RUN apt-get update && apt-get install -y mosquitto-clients
 
 # This should be 4.1.something now.
