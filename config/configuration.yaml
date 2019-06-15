@@ -44,7 +44,7 @@ panel_iframe:
     url: !include /run/frames/portainer
     icon: mdi:docker
   logs_frame:
-    title: '  Logs: Portainer'
+    title: '  Logs: Loki'
     url: !include /run/frames/logs
     icon: mdi:file-cabinet
   status_frame:

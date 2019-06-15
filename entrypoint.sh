@@ -19,6 +19,6 @@ echo "https://$(cat /run/secrets/domain)/docs" > /run/frames/docs
 echo "https://$(cat /run/secrets/domain)/node_red" > /run/frames/node_red
 echo "https://$(cat /run/secrets/domain)/portainer" > /run/frames/portainer
 echo "https://$(cat /run/secrets/domain)/grafana" > /run/frames/grafana
-echo "https://$(cat /run/secrets/domain)/portainer/#/containers" > /run/frames/logs
+echo "https://$(cat /run/secrets/domain)/grafana/explore?left=[\"now-6h\",\"now\",\"Loki\",{},{\"ui\":[true,true,true,\"none\"]}]" > /run/frames/logs
 echo "https://$(cat /run/secrets/domain)/jupyter" > /run/frames/jupyter
 echo "https://$(cat /run/secrets/domain)/health" > /run/frames/health
