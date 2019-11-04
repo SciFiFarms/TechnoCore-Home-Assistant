@@ -61,8 +61,8 @@ config:
 #python_script:
 
 http:
-  ssl_certificate: /run/secrets/cert_bundle
-  ssl_key: /run/secrets/key
+  #ssl_certificate: /run/secrets/cert_bundle
+  #ssl_key: /run/secrets/key
   # Secrets are defined in the file secrets.yaml
   # api_password: !secret http_password
   # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
@@ -122,22 +122,22 @@ automation: !include automations.yaml
 mqtt:
   broker: mqtt
   client_id: home-assistant
-  port: 8883
-  certificate: /run/secrets/ca
+  port: 1883
+  #certificate: /run/secrets/ca
   # One day I'd like to use client certificates for MQTT auth. 
   #client_key: /run/secrets/key
   #client_cert: /run/secrets/cert
-  username: !include /run/secrets/mqtt_username
+  username: home-assistant 
   password: !include /run/secrets/mqtt_password
   discovery: true
   #discovery_prefix: devices
 
 recorder:
-  db_url: postgresql://home_assistant@home_assistant_db/home_assistant?sslmode=require&sslcert=/run/secrets/cert_bundle&sslkey=/run/secrets/key&sslrootcert=/run/secrets/ca
+  db_url: !env_var HOME_ASSISTANT_DB_URL
  
 prometheus:
 
 influxdb:
-  username: !include /run/secrets/timeseries_db_username
-  password: !include /run/secrets/timeseries_db_password
-  host: timeseries_db
+  username: home_assistant
+  password: !include /run/secrets/influxdb_password
+  host: influxdb

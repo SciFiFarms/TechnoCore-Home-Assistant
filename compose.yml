@@ -63,16 +63,16 @@ services:
       mode: global
       restart_policy:
         condition: any
-      placement:
-        constraints:
-          - node.role == manager
-      # Big services will need this modified or removed.
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 64M
-    #environment:
+      #placement:
+      #  constraints:
+      #    - node.role == manager
+      ## Big services will need this modified or removed.
+      #resources:
+      #  limits:
+      #    memory: 128M
+      #  reservations:
+      #    memory: 64M
+    environment:
       # Sometimes you have to pass in ${DOMAIN} to enable the correct link paths to be generated.
       # Othertimes you can use http:// or https:// for the website. Weird trick.
       - DOCKER_HOSTNAME=${HOSTNAME}
