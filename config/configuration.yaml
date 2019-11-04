@@ -14,48 +14,41 @@ homeassistant:
   customize: !include customize.yaml
 
 # For more information about using panel_iframe, see: https://www.home-assistant.io/components/panel_iframe/ 
-panel_iframe:
-  # If you want to add a $SERVICE_NAME here, you can generate them in entrypoint.sh. 
-  esphome_frame:
-    # A prepended space causes this to sort to the top of the list and then gets trimmed out. 
-    # In order to assign the desired order, I put them in the order I wanted, 
-    # and then started at the bottom adding 1 more space than what was lower.
-    title: '        ESPHome'
-    url: !include /run/frames/esphome
-    icon: mdi:home-automation
-  grafana_frame:
-    title: '       Graphs: Grafana'
-    url: !include /run/frames/grafana
-    icon: mdi:chart-areaspline
-  jupyter_frame:
-    title: '      Data-Science: Jupyter'
-    url: !include /run/frames/jupyter
-    icon: mdi:microscope
-  node_red_frame:
-    title: '     Automation: Node-RED'
-    url: !include /run/frames/node_red
-    icon: mdi:resistor-nodes
-  docs_frame:
-    title: '    Documentation'
-    url: !include /run/frames/docs
-    icon: mdi:book-open-variant
-  portainer_frame:
-    title: '   Docker GUI: Portainer'
-    url: !include /run/frames/portainer
-    icon: mdi:docker
-  logs_frame:
-    title: '  Logs: Loki'
-    url: !include /run/frames/logs
-    icon: mdi:file-cabinet
-  status_frame:
-    title: ' Prometheus'
-    url: !include /run/frames/health
-    icon: mdi:server
-  router_frame:
-    title: 'Router'
-    # TODO: It would be better to detect this.
-    url: 'https://192.168.1.1'
-    icon: mdi:access-point-network
+panel_iframe: !include links.yaml
+  ## If you want to add a $SERVICE_NAME here, you can generate them in entrypoint.sh. 
+  #grafana_frame:
+  #  title: '       Graphs: Grafana'
+  #  url: !include /run/frames/grafana
+  #  icon: mdi:chart-areaspline
+  #jupyter_frame:
+  #  title: '      Data-Science: Jupyter'
+  #  url: !include /run/frames/jupyter
+  #  icon: mdi:microscope
+  #node_red_frame:
+  #  title: '     Automation: Node-RED'
+  #  url: !include /run/frames/node_red
+  #  icon: mdi:resistor-nodes
+  #docs_frame:
+  #  title: '    Documentation'
+  #  url: !include /run/frames/docs
+  #  icon: mdi:book-open-variant
+  #portainer_frame:
+  #  title: '   Docker GUI: Portainer'
+  #  url: !include /run/frames/portainer
+  #  icon: mdi:docker
+  #logs_frame:
+  #  title: '  Logs: Loki'
+  #  url: !include /run/frames/logs
+  #  icon: mdi:file-cabinet
+  #status_frame:
+  #  title: ' Prometheus'
+  #  url: !include /run/frames/health
+  #  icon: mdi:server
+  #router_frame:
+  #  title: 'Router'
+  #  # TODO: It would be better to detect this.
+  #  url: 'https://192.168.1.1'
+  #  icon: mdi:access-point-network
 
 # Enables the frontend
 frontend:

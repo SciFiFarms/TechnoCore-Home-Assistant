@@ -59,14 +59,18 @@ do
     sleep 5
 done
 
-mkdir /run/frames
-echo "https://$(cat /run/secrets/domain):6052" > /run/frames/esphome
-echo "https://$(cat /run/secrets/domain)/docs" > /run/frames/docs
-echo "https://$(cat /run/secrets/domain)/node_red" > /run/frames/node_red
-echo "https://$(cat /run/secrets/domain)/portainer" > /run/frames/portainer
-echo "https://$(cat /run/secrets/domain)/grafana" > /run/frames/grafana
-echo "https://$(cat /run/secrets/domain)/grafana/explore?left=[\"now-6h\",\"now\",\"Loki\",{},{\"ui\":[true,true,true,\"none\"]}]" > /run/frames/logs
-echo "https://$(cat /run/secrets/domain)/jupyter" > /run/frames/jupyter
-echo "https://$(cat /run/secrets/domain)/health" > /run/frames/health
+echo "# Do not modify this file. It is generated in the entrypoint.sh script." > /config/links.yaml
+for sidebar_item in $(printenv | grep SIDEBAR | cut -f1 -d"="); do
+    # A prepended space causes this to sort to the top of the list and then gets trimmed out. 
+    # In order to assign the desired order, I put them in the order I wanted, 
+    # and then started at the bottom adding 1 more space than what was lower.
+    title=$(echo "${!sidebar_item}" | cut -d "|" -f1)
+    link=$(echo "${!sidebar_item}" | cut -d "|" -f2)
+    icon=$(echo "${!sidebar_item}" | cut -d "|" -f3)
+    echo "${sidebar_item,,}:" >> /config/links.yaml
+    echo "  title: $title" >> /config/links.yaml
+    echo "  url: https://$link/" >> /config/links.yaml
+    echo "  icon: $icon" >> /config/links.yaml
+done
 
 exec "$@"
