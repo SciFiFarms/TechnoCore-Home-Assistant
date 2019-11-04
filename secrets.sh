@@ -8,4 +8,6 @@ source ${TECHNOCORE_LIB}/create-secret.sh
 # and end in _username or _password. 
 # The exception is if there is an admin username/password. In that case, ${STACK_NAME}_admin... does 
 # not get created because there is no admin service.
-#generate_password_for [your_service_name]
+generate_password_for home_assistant_db
+generate_password_for mqtt
+generate_password_for influxdb
