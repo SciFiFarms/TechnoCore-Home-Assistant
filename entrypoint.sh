@@ -74,4 +74,8 @@ for sidebar_item in $(printenv | grep SIDEBAR | cut -f1 -d"="); do
 done
 
 export HOME_ASSISTANT_DB_URL="postgresql://home_assistant:$(cat /run/secrets/home_assistant_db_password)@home_assistant_db/home_assistant"
+## For Traefik 2.0. I had originally seen postgres restart as home assistant was connecting.
+# This caused an error and I thought it might be what was breaking home assistant. I don't 
+# think that was the case, but want to leave this here just in case.
+#sleep 20
 exec "$@"

@@ -60,6 +60,25 @@ services:
         # Traefik service that listens to HTTPS
         - traefik.webservice.frontend.entryPoints=https
         - com.ouroboros.enable=true
+        # For Traefik 2.0
+        #- "traefik.http.routers.home_assistant.rule=$HOME_ASSISTANT_ROUTING_LABEL"
+        #- "traefik.http.routers.home_assistant.priority=$HOME_ASSISTANT_ROUTING_LABEL_PRIORITY"
+        #- "traefik.http.routers.home_assistant.entrypoints=web-secure"
+        #- "traefik.http.routers.home_assistant.service=home_assistant"
+        #- "traefik.http.routers.home_assistant.tls"
+        #- traefik.http.services.home_assistant.loadbalancer.server.port=8123
+        #- traefik.enable=true
+        ## Had some trouble connecting via wss. Maybe some of these would help?
+        #- traefik.http.middlewares.home_assistant.headers.customrequestheaders.X-Forwarded-Proto=https
+        #- "traefik.http.middlewares.home_assistant.headers.SSLRedirect=true"
+        #- "traefik.http.middlewares.home_assistant.headers.STSSeconds=315360000"
+        #- "traefik.http.middlewares.home_assistant.headers.browserXSSFilter=true"
+        #- "traefik.http.middlewares.home_assistant.headers.contentTypeNosniff=true"
+        #- "traefik.http.middlewareso.home_assistant.headers.SSLHost=(`OMITTED`)"
+        #- "traefik.http.middlewares.home_assistant.headers.forceSTSHeader=true"
+        #- "traefik.http.middlewares.home_assistant.headers.STSIncludeSubdomains=true"
+        #- "traefik.http.middlewares.home_assistant.headers.STSPreload=true"
+        #- "traefik.http.middlewares.home_assistant.headers.frameDeny=true"
       mode: global
       restart_policy:
         condition: any
