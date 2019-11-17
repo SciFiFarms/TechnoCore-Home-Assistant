@@ -120,6 +120,17 @@ services:
       # changes made to the /config/ dir too. 
       - home-assistant:/config/.storage/
       
+  mqtt:
+    secrets:
+      - source: mqtt_home_assistant_password
+        target: users/home-assistant
+  
+  influxdb:
+    networks:
+      - home_assistant-private
+    secrets:
+      - source: influxdb_home_assistant_password
+        target: home_assistant_password
 
   home_assistant_db:
     deploy:
