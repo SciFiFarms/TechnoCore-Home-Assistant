@@ -1,4 +1,4 @@
-FROM homeassistant/home-assistant:0.100.1
+FROM homeassistant/home-assistant:0.101.3
 RUN apk add --no-cache  mosquitto-clients
 
 # This should be 4.1.something now.
