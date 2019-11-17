@@ -1,0 +1,161 @@
+version: "3.5"
+
+networks:
+  home_assistant:
+  home_assistant-private:
+
+volumes:
+  home-assistant:
+  home-assistant-db:
+
+secrets:
+  # Secrets format
+  # ${service_name}_${mount_point}:
+  #   name: ${STACK_NAME:-technocore}_${service_name}_${mount_point}
+  # #   external: true
+  home_assistant_admin_password:
+    name: ${STACK_NAME:-technocore}_home_assistant_admin_password
+    external: true
+  home_assistant_db_admin_password:
+    name: ${STACK_NAME:-technocore}_home_assistant_db_admin_password
+    external: true
+  home_assistant_db_home_assistant_password:
+    name: ${STACK_NAME:-technocore}_home_assistant_db_home_assistant_password
+    external: true
+  home_assistant_home_assistant_db_password:
+    name: ${STACK_NAME:-technocore}_home_assistant_home_assistant_db_password
+    external: true
+  home_assistant_mqtt_password:
+    name: ${STACK_NAME:-technocore}_home_assistant_mqtt_password
+    external: true
+  mqtt_home_assistant_password:
+    name: ${STACK_NAME:-technocore}_mqtt_home_assistant_password
+    external: true
+  home_assistant_influxdb_password:
+    name: ${STACK_NAME:-technocore}_home_assistant_influxdb_password
+    external: true
+  influxdb_home_assistant_password:
+    name: ${STACK_NAME:-technocore}_influxdb_home_assistant_password
+    external: true
+
+services:
+  ingress:
+    networks:
+      - home_assistant
+
+  home_assistant:
+    deploy:
+      labels:
+        - traefik.frontend.rule=$HOME_ASSISTANT_ROUTING_LABEL
+        - traefik.frontend.priority=$HOME_ASSISTANT_ROUTING_LABEL_PRIORITY
+        - traefik.port=8123
+        #- ${TRAEFIK_BASIC_AUTH}
+        - traefik.enable=true
+        # You'll need to set applicaiton's port here.
+        - traefik.tags=ingress 
+        - traefik.docker.network=${STACK_NAME:-technocore}_home_assistant
+        # Traefik service that listens to HTTP
+        - traefik.redirectorservice.frontend.entryPoints=http
+        - traefik.redirectorservice.frontend.redirect.entryPoint=https
+        # Traefik service that listens to HTTPS
+        - traefik.webservice.frontend.entryPoints=https
+        - com.ouroboros.enable=true
+        # For Traefik 2.0
+        #- "traefik.http.routers.home_assistant.rule=$HOME_ASSISTANT_ROUTING_LABEL"
+        #- "traefik.http.routers.home_assistant.priority=$HOME_ASSISTANT_ROUTING_LABEL_PRIORITY"
+        #- "traefik.http.routers.home_assistant.entrypoints=web-secure"
+        #- "traefik.http.routers.home_assistant.service=home_assistant"
+        #- "traefik.http.routers.home_assistant.tls"
+        #- traefik.http.services.home_assistant.loadbalancer.server.port=8123
+        #- traefik.enable=true
+        ## Had some trouble connecting via wss. Maybe some of these would help?
+        #- traefik.http.middlewares.home_assistant.headers.customrequestheaders.X-Forwarded-Proto=https
+        #- "traefik.http.middlewares.home_assistant.headers.SSLRedirect=true"
+        #- "traefik.http.middlewares.home_assistant.headers.STSSeconds=315360000"
+        #- "traefik.http.middlewares.home_assistant.headers.browserXSSFilter=true"
+        #- "traefik.http.middlewares.home_assistant.headers.contentTypeNosniff=true"
+        #- "traefik.http.middlewareso.home_assistant.headers.SSLHost=(`OMITTED`)"
+        #- "traefik.http.middlewares.home_assistant.headers.forceSTSHeader=true"
+        #- "traefik.http.middlewares.home_assistant.headers.STSIncludeSubdomains=true"
+        #- "traefik.http.middlewares.home_assistant.headers.STSPreload=true"
+        #- "traefik.http.middlewares.home_assistant.headers.frameDeny=true"
+      mode: global
+      restart_policy:
+        condition: any
+      #placement:
+      #  constraints:
+      #    - node.role == manager
+      ## Big services will need this modified or removed.
+      #resources:
+      #  limits:
+      #    memory: 128M
+      #  reservations:
+      #    memory: 64M
+    environment:
+      # Sometimes you have to pass in ${DOMAIN} to enable the correct link paths to be generated.
+      # Othertimes you can use http:// or https:// for the website. Weird trick.
+      - DOCKER_HOSTNAME=${HOSTNAME}
+      - ADMIN_USER=${ADMIN_USER}
+    image: ${image_provider:-scififarms}/technocore-home-assistant:${TAG:-latest}
+    logging:
+      driver: "${LOGGING_DRIVER}"
+      options:
+        tag: "{{.Name}}"
+    networks:
+      - home_assistant
+      - home_assistant-private
+      - mqtt
+    secrets:
+      - source: home_assistant_mqtt_password
+        target: mqtt_password
+      - source: home_assistant_influxdb_password
+        target: influxdb_password
+      - source: home_assistant_home_assistant_db_password
+        target: home_assistant_db_password
+    # TODO: Currently, Home Assistant runs as root. Need to figure out how to run Home Assistant as a user while being hosted on a server.
+    #user: ${UID}
+    volumes:
+      # Might need to change from "/config/.storage" to "/config". 
+      # "/config/.storage" is where the users are kept, but we might want to save
+      # changes made to the /config/ dir too. 
+      - home-assistant:/config/.storage/
+      
+  mqtt:
+    secrets:
+      - source: mqtt_home_assistant_password
+        target: users/home-assistant
+  
+  influxdb:
+    networks:
+      - home_assistant-private
+    secrets:
+      - source: influxdb_home_assistant_password
+        target: home_assistant_password
+
+  home_assistant_db:
+    deploy:
+      labels:
+        - com.ouroboros.enable=true
+      mode: global
+      restart_policy:
+        condition: any
+    environment:
+      - ADMIN_USER=$ADMIN_USER
+      - POSTGRES_PASSWORD={{"{{DOCKER-SECRET:home_assistant_password}}"}}
+      - POSTGRES_USER=home_assistant
+    image: ${image_provider:-scififarms}/technocore-home-assistant-db:${TAG:-latest}
+    logging:
+      driver: "${LOGGING_DRIVER}"
+      options:
+        tag: "{{.Name}}"
+    networks:
+      - home_assistant-private
+    secrets:
+      - source: home_assistant_db_admin_password
+        target: admin_password
+      - source: home_assistant_db_home_assistant_password
+        target: home_assistant_password
+    user: postgres 
+    volumes:
+      - home-assistant-db:/var/lib/postgresql/data
+      #- ${home_assistant_db_live_mount:-./empty/:/opt/.dummy}
