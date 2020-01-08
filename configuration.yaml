@@ -1,0 +1,94 @@
+# For more information about using panel_iframe, see: https://www.home-assistant.io/components/panel_iframe/ 
+panel_iframe: "!include links.yaml"
+
+# Enables the frontend
+frontend:
+  themes: "!include themes.yaml"
+
+# Enables configuration UI
+config:
+
+# Enables python scripts as services ()
+#python_script:
+
+http:
+  #ssl_certificate: /run/secrets/cert_bundle
+  #ssl_key: /run/secrets/key
+  # Secrets are defined in the file secrets.yaml
+  # api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  base_url: home_assistant:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+#history:
+
+# View all events in a logbook
+logbook:
+
+# TODO: This should probably be turned to plain info in production. 
+# It would be nice to set these via ENV var. 
+logger:
+  default: info
+  logs:
+    custom_components.homie: info
+    custom_components: info
+    homeassistant.bootstrap: info
+    homeassistant.components.mqtt: info
+    frontend.js: info
+# Enables a map showing the location of tracked devices
+#map:
+
+# Track the sun
+sun:
+
+# Weather prediction
+sensor:
+  - platform: yr
+
+# Text to speech
+tts:
+  - platform: google
+
+# Cloud
+cloud:
+
+group: "!include groups.yaml"
+automation: "!include automations.yaml"
+
+mqtt:
+  broker: mqtt
+  client_id: home-assistant
+  port: 1883
+  #certificate: /run/secrets/ca
+  # One day I'd like to use client certificates for MQTT auth. 
+  #client_key: /run/secrets/key
+  #client_cert: /run/secrets/cert
+  username: home-assistant 
+  password: "!include /run/secrets/mqtt_password"
+  discovery: true
+  #discovery_prefix: devices
+
+recorder:
+  db_url: "!env_var HOME_ASSISTANT_DB_URL"
+
+prometheus:
+
+influxdb:
+  username: home_assistant
+  password: "!include /run/secrets/influxdb_password"
+  host: influxdb
