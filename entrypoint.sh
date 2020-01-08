@@ -73,6 +73,9 @@ for sidebar_item in $(printenv | grep SIDEBAR | cut -f1 -d"="); do
     echo "  icon: $icon" >> /config/links.yaml
 done
 
+# TODO: Currently, the generate_home_assistant_configpration.py script has these values hard coded and what's passed here is simply ignored. 
+generate_home_assistant_configuration.py /var/lib/technocore/configuration.yaml /config/custom-configuration.yaml /config/configuration.yaml
+
 export HOME_ASSISTANT_DB_URL="postgresql://home_assistant:$(cat /run/secrets/home_assistant_db_password)@home_assistant_db/home_assistant"
 ## For Traefik 2.0. I had originally seen postgres restart as home assistant was connecting.
 # This caused an error and I thought it might be what was breaking home assistant. I don't 
