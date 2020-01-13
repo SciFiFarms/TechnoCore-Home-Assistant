@@ -23,3 +23,6 @@ set_service_flag $service_name
 #    export SERVICE_CONFIG_prometheus_exporters=${TECHNOCORE_SERVICES}/prometheus/exporters.yml
 #fi
 
+# This allows for realtime editing of Home Assistant configs and scripts. 
+generate_mount dev config /config
+generate_mount dev src /usr/src/app
