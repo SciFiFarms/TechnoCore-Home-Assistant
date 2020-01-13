@@ -68,8 +68,8 @@ for sidebar_item in $(printenv | grep SIDEBAR | cut -f1 -d"="); do
     link=$(echo "${!sidebar_item}" | cut -d "|" -f2)
     icon=$(echo "${!sidebar_item}" | cut -d "|" -f3)
     echo "${sidebar_item,,}:" >> /config/links.yaml
-    echo "  title: $title" >> /config/links.yaml
-    echo "  url: https://$link/" >> /config/links.yaml
+    echo "  title: \"$title\"" >> /config/links.yaml
+    echo "  url: \"https://$link/\"" >> /config/links.yaml
     echo "  icon: $icon" >> /config/links.yaml
 done
 
