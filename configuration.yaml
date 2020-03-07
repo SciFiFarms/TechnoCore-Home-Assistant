@@ -88,6 +88,8 @@ recorder:
 
 prometheus:
 
+mobile_app:
+
 influxdb:
   username: home_assistant
   password: "!include /run/secrets/influxdb_password"
