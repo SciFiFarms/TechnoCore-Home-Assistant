@@ -2,8 +2,8 @@
 panel_iframe: "!include links.yaml"
 
 # Enables the frontend
-frontend:
-  themes: "!include themes.yaml"
+#frontend:
+#  themes: "!include themes.yaml"
 
 # Enables configuration UI
 config:
@@ -61,8 +61,8 @@ sensor:
   - platform: yr
 
 # Text to speech
-tts:
-  - platform: google
+#tts:
+#  - platform: google_translate
 
 # Cloud
 cloud:
