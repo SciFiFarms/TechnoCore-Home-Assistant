@@ -92,10 +92,9 @@ services:
       #  reservations:
       #    memory: 64M
     environment:
-      # Sometimes you have to pass in ${DOMAIN} to enable the correct link paths to be generated.
-      # Othertimes you can use http:// or https:// for the website. Weird trick.
       - DOCKER_HOSTNAME=${HOSTNAME}
       - ADMIN_USER=${ADMIN_USER}
+      - DOMAIN=${DOMAIN}
     image: ${image_provider:-scififarms}/technocore-home-assistant:${TAG:-latest}
     logging:
       driver: "${LOGGING_DRIVER}"

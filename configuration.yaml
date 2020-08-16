@@ -60,6 +60,13 @@ sun:
 sensor:
   - platform: yr
 
+  - platform: template
+    sensors:
+      fqdn:
+        friendly_name: "Fully Qualified Domain Name"
+        unit_of_measurement: 'domain'
+        value_template: "!env_var DOMAIN"
+
 # Text to speech
 #tts:
 #  - platform: google_translate
