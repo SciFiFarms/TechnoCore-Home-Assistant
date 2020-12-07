@@ -101,3 +101,8 @@ influxdb:
   username: home_assistant
   password: "!include /run/secrets/influxdb_password"
   host: influxdb
+  # How to use the friendly_name tag in Grafana
+  # https://community.home-assistant.io/t/grafana-influxdb-using-friendly-names/41145/5#post_5
+  tags_attributes:
+    - friendly_name
+    - hidden
