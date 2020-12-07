@@ -34,9 +34,6 @@ secrets:
   home_assistant_influxdb_password:
     name: ${STACK_NAME:-technocore}_home_assistant_influxdb_password
     external: true
-  influxdb_home_assistant_password:
-    name: ${STACK_NAME:-technocore}_influxdb_home_assistant_password
-    external: true
 
 services:
   ingress:
@@ -107,8 +104,6 @@ services:
     secrets:
       - source: home_assistant_mqtt_password
         target: mqtt_password
-      - source: home_assistant_influxdb_password
-        target: influxdb_password
       - source: home_assistant_home_assistant_db_password
         target: home_assistant_db_password
     # TODO: Currently, Home Assistant runs as root. Need to figure out how to run Home Assistant as a user while being hosted on a server.
@@ -118,19 +113,12 @@ services:
       # "/config/.storage" is where the users are kept, but we might want to save
       # changes made to the /config/ dir too. 
       - home-assistant:/config/.storage/
-      
+
   mqtt:
     secrets:
       - source: mqtt_home_assistant_password
         target: users/home-assistant
   
-  influxdb:
-    networks:
-      - home_assistant-private
-    secrets:
-      - source: influxdb_home_assistant_password
-        target: home_assistant_password
-
   home_assistant_db:
     deploy:
       labels:

@@ -1,0 +1,30 @@
+version: "3.5"
+
+networks:
+  influxdb-home_assistant:
+
+secrets:
+  influxdb_home_assistant_password:
+    name: ${STACK_NAME:-technocore}_influxdb_home_assistant_password
+    external: true
+  home_assistant_influxdb_password:
+    name: ${STACK_NAME:-technocore}_home_assistant_influxdb_password
+    external: true
+
+services:
+  influxdb:
+    networks:
+      - influxdb-home_assistant
+    secrets:
+      - source: influxdb_home_assistant_password
+        target: users/home_assistant
+
+  home_assistant:
+    networks:
+      - influxdb-home_assistant
+    secrets:
+      - source: home_assistant_influxdb_password
+        target: influxdb_password
+
+
+
