@@ -18,6 +18,11 @@ RUN cd /tmp/ && \
     cd HomeAssistant && \
     git checkout master -- custom_components/compensation && \
     cp -r custom_components/compensation/ /config/custom_components/compensation/ && \
+    cd ../ && \
+    git clone --depth 1  --filter=blob:none  --no-checkout https://github.com/custom-components/healthchecksio.git && \
+    cd healthchecksio && \
+    git checkout master -- custom_components/healthchecksio && \
+    cp -r custom_components/healthchecksio/ /config/custom_components/healthchecksio/ && \
     rm -rf /tmp/
 ENTRYPOINT ["go-init"]
 # TODO: It would be nice to figure out how to make it wait for attach here.
