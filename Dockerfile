@@ -21,7 +21,7 @@ RUN cd /tmp/ && \
     cd ../ && \
     git clone --depth 1  --filter=blob:none  --no-checkout https://github.com/custom-components/healthchecksio.git && \
     cd healthchecksio && \
-    git checkout master -- custom_components/healthchecksio && \
+    git checkout main -- custom_components/healthchecksio && \
     cp -r custom_components/healthchecksio/ /config/custom_components/healthchecksio/ && \
     rm -rf /tmp/
 ENTRYPOINT ["go-init"]
