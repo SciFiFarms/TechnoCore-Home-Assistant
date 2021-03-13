@@ -1,4 +1,4 @@
-# For more information about using panel_iframe, see: https://www.home-assistant.io/components/panel_iframe/ 
+# For more information about using panel_iframe, see: https://www.home-assistant.io/components/panel_iframe/
 panel_iframe: "!include links.yaml"
 
 # Enables the frontend
@@ -40,8 +40,8 @@ conversation:
 # View all events in a logbook
 logbook:
 
-# TODO: This should probably be turned to plain info in production. 
-# It would be nice to set these via ENV var. 
+# TODO: This should probably be turned to plain info in production.
+# It would be nice to set these via ENV var.
 logger:
   default: info
   logs:
@@ -66,6 +66,21 @@ sensor:
         friendly_name: "Fully Qualified Domain Name"
         unit_of_measurement: 'domain'
         value_template: "!env_var DOMAIN"
+  # Keep track of downed sensors/devices. Originated from: https://gist.github.com/jazzyisj/45fce29d825b8f9b29c5974444299d90
+  - platform: template
+    sensors:
+      unavailable_entities:
+        friendly_name: Unavailable Entities
+        unit_of_measurement: entities
+        icon_template: "{{ 'mdi:check-circle' if is_state('sensor.unavailable_entities','0') else 'mdi:alert-circle' }}"
+        value_template: >
+          {{ states|selectattr('state','in',['unavailable','unknown'])|rejectattr('domain','eq','group')
+            |rejectattr('entity_id','in',state_attr('group.ignored_entities','entity_id'))|list|count }}
+        attribute_templates:
+          entities: >
+            {{ states|selectattr('state','in',['unavailable','unknown'])|rejectattr('domain','eq','group')
+                |rejectattr('entity_id','in',state_attr('group.ignored_entities','entity_id'))|map(attribute='entity_id')|list }}
+
 
 # Text to speech
 #tts:
@@ -82,10 +97,10 @@ mqtt:
   client_id: home-assistant
   port: 1883
   #certificate: /run/secrets/ca
-  # One day I'd like to use client certificates for MQTT auth. 
+  # One day I'd like to use client certificates for MQTT auth.
   #client_key: /run/secrets/key
   #client_cert: /run/secrets/cert
-  username: home-assistant 
+  username: home-assistant
   password: "!include /run/secrets/mqtt_password"
   discovery: true
   #discovery_prefix: devices
