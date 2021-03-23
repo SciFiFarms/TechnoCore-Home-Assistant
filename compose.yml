@@ -49,7 +49,7 @@ services:
         #- ${TRAEFIK_BASIC_AUTH}
         - traefik.enable=true
         # You'll need to set applicaiton's port here.
-        - traefik.tags=ingress 
+        - traefik.tags=ingress
         - traefik.docker.network=${STACK_NAME:-technocore}_home_assistant
         # Traefik service that listens to HTTP
         - traefik.redirectorservice.frontend.entryPoints=http
@@ -109,16 +109,16 @@ services:
     # TODO: Currently, Home Assistant runs as root. Need to figure out how to run Home Assistant as a user while being hosted on a server.
     #user: ${UID}
     volumes:
-      # Might need to change from "/config/.storage" to "/config". 
+      # Might need to change from "/config/.storage" to "/config".
       # "/config/.storage" is where the users are kept, but we might want to save
-      # changes made to the /config/ dir too. 
+      # changes made to the /config/ dir too.
       - home-assistant:/config/.storage/
 
   mqtt:
     secrets:
       - source: mqtt_home_assistant_password
         target: users/home-assistant
-  
+
   home_assistant_db:
     deploy:
       labels:
@@ -130,6 +130,7 @@ services:
       - ADMIN_USER=$ADMIN_USER
       - POSTGRES_PASSWORD={{"{{DOCKER-SECRET:home_assistant_password}}"}}
       - POSTGRES_USER=home_assistant
+      - POSTGRES_DB=home_assistant
     image: ${image_provider:-scififarms}/technocore-home-assistant-db:${TAG:-latest}
     logging:
       driver: "${LOGGING_DRIVER}"
@@ -142,7 +143,7 @@ services:
         target: admin_password
       - source: home_assistant_db_home_assistant_password
         target: home_assistant_password
-    user: postgres 
+    user: postgres
     volumes:
       - home-assistant-db:/var/lib/postgresql/data
       #- ${home_assistant_db_live_mount:-./empty/:/opt/.dummy}
