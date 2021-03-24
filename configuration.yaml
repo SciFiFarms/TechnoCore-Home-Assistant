@@ -113,6 +113,7 @@ prometheus:
 mobile_app:
 
 influxdb:
+  default_measurement: state
   username: home_assistant
   password: "!include /run/secrets/influxdb_password"
   host: influxdb
