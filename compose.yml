@@ -113,6 +113,7 @@ services:
       # "/config/.storage" is where the users are kept, but we might want to save
       # changes made to the /config/ dir too.
       - home-assistant:/config/.storage/
+      - ${DEV_MOUNT_HOME_ASSISTANT_MIGRATIONS:-$EMPTY_MOUNT}
 
   mqtt:
     secrets:
