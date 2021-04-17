@@ -1,0 +1,199 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+#debugpy:
+  #wait: true
+
+# Text to speech
+tts:
+  - platform: picotts
+    service_name: picotts_say
+    base_url: https://home.spencerslab.com
+    language: "en-US"
+    cache: false
+notify:
+  - platform: tts
+    name: in_the_dining_room
+    tts_service: tts.picotts_say
+    media_player: media_player.dining_room_audio
+  - platform: tts
+    name: home_tts
+    tts_service: tts.picotts_say
+    media_player: media_player.home_tts
+
+light:
+  - platform: switch
+    name: Cube Shelf Light
+    entity_id: switch.plant_light_01_relay
+
+http:
+  ip_ban_enabled: true
+  login_attempts_threshold: 5
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.30.33.0/24
+
+auto_backup:
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+frontend:
+  themes: !include_dir_merge_named themes
+
+# panel_iframe:
+#   router:
+#     title: "Router"
+#     url: "https://192.168.1.1"
+#   mopidy:
+#     title: "Audio"
+#     url: "https://audio.spencerslab.com/iris/"
+
+magic_areas:
+homeassistant:
+  packages: !include_dir_named packages
+
+logger:
+  logs:
+    homeassistant.components.http.ban: warning
+
+sensor:
+  - platform: nhl_api
+    #team_id: 15 # Caps
+    team_id: 21
+  - platform: template
+    sensors:
+      away_team:
+        friendly_name_template: "{{ states.sensor.nhl_sensor.attributes.away_name }}"
+        value_template: "{{ states.sensor.nhl_sensor.attributes.away_score }}"
+        entity_picture_template: "{{ states.sensor.nhl_sensor.attributes.away_logo }}"
+      home_team:
+        friendly_name_template: "{{ states.sensor.nhl_sensor.attributes.home_name }}"
+        value_template: "{{ states.sensor.nhl_sensor.attributes.home_score }}"
+        entity_picture_template: "{{ states.sensor.nhl_sensor.attributes.home_logo }}"
+  - platform: fail2ban
+    jails:
+      - ssh
+      - hass-iptables
+  - platform: imap_email_content
+    server: mail.spencerslab.com
+    name: noco_nosh
+    port: 993
+    username: !secret imap_username
+    password: !secret imap_password
+    senders:
+      - noreply@www.noconosh.com
+      - orders+sprouts@instacart.com
+      - orders+costco@instacart.com
+      - "*@instacart.com"
+      - "*@grubhub.com"
+
+    value_template: >-
+      {% if (
+        'Driver at restaurant' in subject or
+        'Your Costco order is confirmed for' in subject or
+        'Your Sprouts Farmers Market order is confirmed for' in subject or
+        'Your King Soopers order is confirmed' in subject or
+        'is being prepared' in subject
+      ) %}
+        delivery_coming
+      {% elif (
+        'Your Costco order receipt' in subject or
+        'Your Sprouts Farmers Market order receipt' in subject or
+        'Your Instacart order receipt' in subject or
+        'Order delivered' in subject
+      ) %}
+        no_deliveries
+      {% endif %}
+
+media_player:
+  - platform: snapcast
+    host: 127.0.0.1
+
+  - platform: mpd
+    host: audio.spencerslab.com
+    port: 6601
+    name: Home TTS
+
+  - platform: mpd
+    host: audio.spencerslab.com
+    name: Whole House Audio
+
+  - platform: mpd
+    host: dining-room-audio.local
+    name: Dining Room Audio
+    #location: Multi-Room Controller
+#- platform: mpd
+#  server: localhost
+#  location: Room 1
+#weblink:
+#  entities:
+#  - name: Multi-Room Player
+#    url: http://home.spencerslab.com:1780/
+variable:
+  #countdown_timer:
+  #  value: 30
+  #  attributes:
+  #    friendly_name: 'Countdown'
+  #    icon: mdi:alarm
+  #countdown_trigger:
+  #  name: Countdown
+  #  value: False
+  calibration_values:
+    value: ['normal', "bad", cool]
+    attributes:
+      previous: ''
+  calibration_devices:
+    value: ["calibration": "devices"]
+    #restore: true
+  #current_power_usage:
+  #  force_update: true
+var:
+  calibration_values:
+    friendly_name: 'Calibration Values'
+  calibration_entities:
+    friendly_name: 'Calibration Entities'
+    initial_value:
+zwave:
+  usb_path: /dev/ttyUSB0
+  #network_key: ""
+zha:
+  database_path: /config/zigbee.db
+
+compensation:
+
+binary_sensor:
+  - platform: ping
+    host: 1.1.1.1
+    name: "Internet Connection"
+    count: 2
+    scan_interval: 60
+
+input_number:
+  calibration_input:
+    min: 0
+    max: 500
+    mode: box
+
+  # Will set attribute to calibration readings.
+  calibration_readings:
+    min: 0
+    max: 500
+
+  manual_raw:
+    min: 0
+    max: 500
+
+#   home_score:
+#     min: 0
+#     max: 100
+
+influxdb:
+  default_measurement: state
+  username: !secret influxdb_username
+  password: !secret influxdb_password
+  # How to use the friendly_name tag in Grafana
+  # https://community.home-assistant.io/t/grafana-influxdb-using-friendly-names/41145/5#post_5
+  tags_attributes:
+    - friendly_name
+    - hidden
+

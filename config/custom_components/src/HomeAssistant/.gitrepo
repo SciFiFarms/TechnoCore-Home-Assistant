@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/TheHackmeister/HomeAssistant.git
+	branch = master
+	commit = a2ec428c406b6374012320b1a478340fb0f99d43
+	parent = 02d2b59ddc1ca057d5cf47b09247fb0bde31751a
+	method = merge
+	cmdver = 0.4.0
