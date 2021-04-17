@@ -1,0 +1,37 @@
+default_config:
+
+demo:
+
+lovelace:
+  mode: storage
+  dashboards:
+    lovelace-yaml:
+      mode: yaml
+      title: yaml
+      filename: test/lovelace.yaml
+
+light:
+  - platform: group
+    name: group
+    entities:
+      - light.bed_light
+      - light.ceiling_lights
+      - light.kitchen_lights
+
+group:
+  light_group:
+    name: Lights group
+    entities:
+      - light.bed_light
+      - light.ceiling_lights
+      - light.kitchen_lights
+  switch_group:
+    name: Switches group
+    entities:
+      - switch.ac
+      - switch.decorative_lights
+  group_group:
+    name: Groups grop
+    entities:
+      - group.light_group
+      - group.switch_group

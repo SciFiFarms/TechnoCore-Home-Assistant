@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/thomasloven/lovelace-fold-entity-row.git
+	branch = master
+	commit = f9a214ec31a898207607e46898f7b3fc959e5c12
+	parent = 05882d55b631c58996b3dbbd63aaf316f3988fdb
+	method = merge
+	cmdver = 0.4.0
