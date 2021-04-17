@@ -1,0 +1,60 @@
+resources:
+  - url: /local/auto-entities.js
+    type: module
+views:
+  - title: Water Supply
+    path: water-supply
+    icon: 'mdi:water-pump'
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: 'custom:auto-entities'
+            card:
+              type: entities
+              title: Raw Entities
+            filter:
+              include:
+                - name: /raw/
+                - entity_id: /raw/
+                  options:
+                    tap_action:
+                      action: call-service
+                      service: pyscript.add_calibration_entity
+                      service_data:
+                        entity: this.entity_id
+          - type: horizontal-stack
+            cards:
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: pyscript.add_calibration_reading
+                name: Add Calibration Point
+                icon: 'hass:lightbulb'
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: script.run_calibration
+                name: Start Calibration
+                icon: 'hass:lightbulb'
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: script.stop_calibration
+                name: Stop Calibration
+                icon: 'hass:lightbulb'
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: script.clear_calibration_list
+                name: Clear Calibration Entities
+                icon: 'hass:lightbulb'
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: pyscript.calibration_calc
+                name: Calc Calibration
+                icon: 'hass:lightbulb'
+          - type: entity
+            entity: var.calibration_entities
+            name: Calibration Entities

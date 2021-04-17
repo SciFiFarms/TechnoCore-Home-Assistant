@@ -91,6 +91,9 @@ sensor:
 # Cloud
 cloud:
 
+homeassistant:
+  packages: '!include_dir_named packages'
+
 group: "!include groups.yaml"
 automation: "!include automations.yaml"
 

@@ -1,0 +1,13 @@
+{
+    "version": 1,
+    "key": "lovelace_resources",
+    "data": {
+        "items": [
+            {
+                "url": "local/auto-entities.js",
+                "type": "module",
+                "id": "b1fe2da4d094489eb8c6c2d2fcdaee10"
+            }
+        ]
+    }
+}

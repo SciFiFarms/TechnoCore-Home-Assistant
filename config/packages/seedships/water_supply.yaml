@@ -1,0 +1,53 @@
+---
+input_select:
+  water_supply_mode:
+    name: Water Supply Mode
+    options:
+    - "MODE_RUNNING: 1"
+    - "MODE_MANUAL_OVERRIDE: 2"
+    - "MODE_CALIBRATION: 3"
+    - "MODE_WATER_SUPPLY_ERROR: 4"
+
+  water_supply_tracked_entity:
+    name: "Water Supply Tracked Entity"
+    options:
+    - "sensor.water_supply_01_mode"
+
+
+automation:
+- alias: "Set Water Supply Mode Selector"
+  trigger:
+    platform: state
+    entity_id: sensor.water_supply_01_mode
+  action:
+    service: input_select.select_option
+    target:
+      entity_id: input_select.water_supply_mode
+    data:
+      option: "{{ trigger.payload }}"
+
+# This automation script runs when the water supply mode selector is changed.
+# It publishes its value to the same MQTT topic it is also subscribed to.
+- alias: "Set Water Supply Mode"
+  trigger:
+    platform: state
+    entity_id: input_select.water_supply_mode
+  action:
+    service: mqtt.publish
+    data:
+      topic: "seedship/water_supply_01/mode"
+      retain: true
+
+
+lovelace:
+  #mode: storage
+  #resources:
+  #  - url: /local/auto-entities.js
+  #    type: module
+  dashboards:
+    lovelace-seedship:
+      mode: yaml
+      title: SeedShips
+      icon: mdi:script
+      show_in_sidebar: true
+      filename: dashboards/seedships.yaml

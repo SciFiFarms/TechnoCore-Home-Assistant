@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Most of this file comes from https://medium.com/@basi/docker-environment-variables-expanded-from-secrets-8fa70617b3bc 
-# Thanks Basilio Vera, Rubén Norte, and Jose Manuel Cardona! 
+# Most of this file comes from https://medium.com/@basi/docker-environment-variables-expanded-from-secrets-8fa70617b3bc
+# Thanks Basilio Vera, Rubén Norte, and Jose Manuel Cardona!
 
 : ${ENV_SECRETS_DIR:=/run/secrets}
 
@@ -46,9 +46,9 @@ env_secrets_expand() {
 env_secrets_expand
 dogfish migrate &
 
-# Add any additional script here. 
+# Add any additional script here.
 #dogfish migrate &
-#source /usr/share/mqtt-scripts/init.sh 
+#source /usr/share/mqtt-scripts/init.sh
 until mosquitto_pub -i test_connection -h mqtt -p 1883 -q 0 \
     -t test/network/up \
     -m "A message" \
@@ -62,8 +62,8 @@ done
 
 echo "# Do not modify this file. It is generated in the entrypoint.sh script." > /config/links.yaml
 for sidebar_item in $(printenv | grep SIDEBAR | cut -f1 -d"="); do
-    # A prepended space causes this to sort to the top of the list and then gets trimmed out. 
-    # In order to assign the desired order, I put them in the order I wanted, 
+    # A prepended space causes this to sort to the top of the list and then gets trimmed out.
+    # In order to assign the desired order, I put them in the order I wanted,
     # and then started at the bottom adding 1 more space than what was lower.
     title=$(echo "${!sidebar_item}" | cut -d "|" -f1)
     link=$(echo "${!sidebar_item}" | cut -d "|" -f2)
@@ -74,12 +74,15 @@ for sidebar_item in $(printenv | grep SIDEBAR | cut -f1 -d"="); do
     echo "  icon: $icon" >> /config/links.yaml
 done
 
+# Configure the SeedShip dashboard on startup.
+cp /config/lovelace_resources /config/.storage/lovelace_resources
+
 # TODO: Currently, the generate_home_assistant_configpration.py script has these values hard coded and what's passed here is simply ignored. 
 generate_home_assistant_configuration.py /var/lib/technocore/configuration.yaml /config/custom-configuration.yaml /config/configuration.yaml
 
 export HOME_ASSISTANT_DB_URL="postgresql://home_assistant:$(cat /run/secrets/home_assistant_db_password)@home_assistant_db/home_assistant"
 ## For Traefik 2.0. I had originally seen postgres restart as home assistant was connecting.
-# This caused an error and I thought it might be what was breaking home assistant. I don't 
+# This caused an error and I thought it might be what was breaking home assistant. I don't
 # think that was the case, but want to leave this here just in case.
 #sleep 20
 exec "$@"
