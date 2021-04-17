@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/thomasloven/lovelace-auto-entities.git
+	branch = master
+	commit = 73d1a28630290f9c0ed54c407cd8056466104640
+	parent = 084c0fc9981c6c4499429fa4aef28ba424c67e25
+	method = merge
+	cmdver = 0.4.0
