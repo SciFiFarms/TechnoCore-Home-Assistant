@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/snarky-snark/home-assistant-variables.git
+	branch = develop
+	commit = 574daa9fc67930fc5aefb25d90c13eea93847945
+	parent = ee9552681ac4fa7866604e1ced1c0da5202754ec
+	method = merge
+	cmdver = 0.4.0
