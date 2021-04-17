@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/thomasloven/lovelace-hui-element.git
+	branch = master
+	commit = dd3f31f0bfee9ff09d988620e94982bbe5e60438
+	parent = 74620ffb2d8cf4bad1ffca4549dda3726c8f5636
+	method = merge
+	cmdver = 0.4.0
