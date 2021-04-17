@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/thomasloven/lovelace-layout-card.git
+	branch = master
+	commit = fc85649d89420aa9b61a3dfcca63aa730b0a6551
+	parent = 7e54a310781db0ff0525ffdde512d2b796f1f720
+	method = merge
+	cmdver = 0.4.0
