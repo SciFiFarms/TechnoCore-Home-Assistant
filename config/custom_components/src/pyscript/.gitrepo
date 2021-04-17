@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/custom-components/pyscript.git
+	branch = master
+	commit = 17df2e4c1ecc54e0209217199d8a0d5e69460adf
+	parent = 4e048dfe6b9e00894492e50fb21251d8ac3fbad4
+	method = merge
+	cmdver = 0.4.0
