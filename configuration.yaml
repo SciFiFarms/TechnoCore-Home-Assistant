@@ -58,8 +58,6 @@ sun:
 
 # Weather prediction
 sensor:
-  - platform: yr
-
   - platform: template
     sensors:
       fqdn:

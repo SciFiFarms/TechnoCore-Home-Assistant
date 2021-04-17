@@ -7,6 +7,21 @@
                 "url": "local/auto-entities.js",
                 "type": "module",
                 "id": "b1fe2da4d094489eb8c6c2d2fcdaee10"
+            },
+            {
+                "url": "local/hui-element.js",
+                "type": "module",
+                "id": "61e437826a05435ca81175de6db0ab6d"
+            },
+            {
+                "url": "local/fold-entity-row.js",
+                "type": "module",
+                "id": "8e4aba050dbc440fb7c8d432b70da2e6"
+            },
+            {
+                "url": "local/layout-card.js",
+                "type": "module",
+                "id": "35f46fa6932e4258b5de9575ff71371c"
             }
         ]
     }
