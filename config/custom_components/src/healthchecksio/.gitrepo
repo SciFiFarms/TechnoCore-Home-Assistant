@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/custom-components/healthchecksio.git
+	branch = main
+	commit = 2b7083b0e02b1c07cd06008aa58bebdcf6598614
+	parent = 99245766417f5db2e806a3fb56380bdbcd707e9e
+	method = merge
+	cmdver = 0.4.0
