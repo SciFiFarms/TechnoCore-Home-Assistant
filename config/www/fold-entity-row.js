@@ -1,0 +1,1 @@
+src/lovelace-fold-entity-row/fold-entity-row.js

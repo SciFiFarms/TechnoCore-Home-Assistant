@@ -1,0 +1,1 @@
+src/lovelace-auto-entities/auto-entities.js
