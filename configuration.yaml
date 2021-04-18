@@ -16,8 +16,6 @@ http:
   #ssl_key: /run/secrets/key
   # Secrets are defined in the file secrets.yaml
   # api_password: !secret http_password
-  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-  base_url: home_assistant:8123
 
 # Checks for available updates
 # Note: This component will send some information about your system to
