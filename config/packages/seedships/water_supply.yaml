@@ -8,42 +8,21 @@ input_select:
     - "MODE_CALIBRATION: 3"
     - "MODE_WATER_SUPPLY_ERROR: 4"
 
-  water_supply_tracked_entity:
-    name: "Water Supply Tracked Entity"
-    options:
-    - "sensor.water_supply_01_mode"
+pyscript:
 
 
-automation:
-- alias: "Set Water Supply Mode Selector"
-  trigger:
-    platform: state
-    entity_id: sensor.water_supply_01_mode
-  action:
-    service: input_select.select_option
-    target:
-      entity_id: input_select.water_supply_mode
-    data:
-      option: "{{ trigger.payload }}"
+#automation:
+#- alias: "Set Water Supply Mode Selector"
+#  trigger:
+#    platform: state
+#    entity_id: sensor.water_supply_01_mode
+#  action:
 
-# This automation script runs when the water supply mode selector is changed.
-# It publishes its value to the same MQTT topic it is also subscribed to.
-- alias: "Set Water Supply Mode"
-  trigger:
-    platform: state
-    entity_id: input_select.water_supply_mode
-  action:
-    service: mqtt.publish
-    data:
-      topic: "seedship/water_supply_01/mode"
-      retain: true
-
+var:
+  water_supply_mode_entities:
+    friendly_name: 'Water Supply Mode Entities'
 
 lovelace:
-  #mode: storage
-  #resources:
-  #  - url: /local/auto-entities.js
-  #    type: module
   dashboards:
     lovelace-seedship:
       mode: yaml

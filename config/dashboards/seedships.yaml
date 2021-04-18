@@ -1,6 +1,3 @@
-resources:
-  - url: /local/auto-entities.js
-    type: module
 views:
   - title: Water Supply
     path: water-supply
@@ -12,49 +9,40 @@ views:
           - type: 'custom:auto-entities'
             card:
               type: entities
-              title: Raw Entities
+              title: Water Supply Mode
             filter:
               include:
-                - name: /raw/
-                - entity_id: /raw/
+                - entity_id: /water_supply.*mode$/
                   options:
                     tap_action:
                       action: call-service
-                      service: pyscript.add_calibration_entity
+                      service: pyscript.add_entity_to_list_var
                       service_data:
                         entity: this.entity_id
+                        list_var: water_supply_mode_entities
+            sort:
+              method: none
           - type: horizontal-stack
             cards:
               - type: button
                 tap_action:
                   action: call-service
-                  service: pyscript.add_calibration_reading
-                name: Add Calibration Point
+                  service: pyscript.send_state_to_entities_list
+                  service_data:
+                    topic: seedship/THIS_ENTITY/mode
+                    state_entity: input_select.water_supply_mode
+                    numbers_only: true
+                    retain: true
+                    list_var: water_supply_mode_entities
+                name: Set Mode
                 icon: 'hass:lightbulb'
               - type: button
                 tap_action:
                   action: call-service
-                  service: script.run_calibration
-                name: Start Calibration
-                icon: 'hass:lightbulb'
-              - type: button
-                tap_action:
-                  action: call-service
-                  service: script.stop_calibration
-                name: Stop Calibration
-                icon: 'hass:lightbulb'
-              - type: button
-                tap_action:
-                  action: call-service
-                  service: script.clear_calibration_list
-                name: Clear Calibration Entities
-                icon: 'hass:lightbulb'
-              - type: button
-                tap_action:
-                  action: call-service
-                  service: pyscript.calibration_calc
-                name: Calc Calibration
+                  service: pyscript.clear_entities_list_var
+                  service_data:
+                    list_var: water_supply_mode_entities
+                name: Clear Mode Entities
                 icon: 'hass:lightbulb'
           - type: entity
-            entity: var.calibration_entities
-            name: Calibration Entities
+            entity: var.water_supply_mode_entities
