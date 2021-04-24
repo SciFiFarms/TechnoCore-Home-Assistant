@@ -21,6 +21,8 @@ pyscript:
 var:
   water_supply_mode_entities:
     friendly_name: 'Water Supply Mode Entities'
+  seedship_drainage_entities:
+    friendly_name: 'SeedShip Drainage Entities'
 
 lovelace:
   dashboards:
