@@ -35,7 +35,7 @@ def send_mqtt_to_entities_list(list_var=None, topic=None, payload=None, retain=F
     for entity in entities:
         entity = re.sub('.*\.(.*\d+).*', '\\1', entity)
         #log.warning(f"{ entity }")
-        service.call("mqtt", "publish", topic=topic.replace("THIS_ENTITY", entity), payload=payload, retain=retain)
+        service.call("mqtt", "publish", topic=topic.replace("THIS_ENTITY", entity), payload=payload.replace("THIS_ENTITY", entity), retain=retain)
 
         log.warning(f"{ topic.replace('THIS_ENTITY',  entity ) }")
 
