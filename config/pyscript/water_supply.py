@@ -44,4 +44,7 @@ def clear_entities_list_var(list_var=None):
     #log.warning(f"{ list_var }")
     state.set(f'var.{ list_var }',  "[]" )
 
+@mqtt_trigger("seedship/+/warnings", "payload.startswith('CRITICAL')")
+def received_critical_warning(**kwargs):
+    service.call("notify", "signal", message=kwargs['payload'])
 
