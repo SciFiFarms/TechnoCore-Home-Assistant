@@ -2,7 +2,7 @@
 notify:
   - name: signal
     platform: signal_messenger
-    url: "http://signal-api:8080" # the URL where the Signal Messenger REST API is listening
+    url: "http://signal_api:8080" # the URL where the Signal Messenger REST API is listening
     number: "!env_var SIGNAL_API_SEND_NUMBER"
     recipients: # one or more recipients
       - "!env_var SIGNAL_API_RECEIVE_NUMBER"

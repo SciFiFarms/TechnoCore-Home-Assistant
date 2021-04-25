@@ -150,7 +150,7 @@ services:
       #- ${home_assistant_db_live_mount:-./empty/:/opt/.dummy}
 
   # TODO: Make this it's own service. Could maybe connect with Grafana?
-  signal-api:
+  signal_api:
     deploy:
       labels:
         - com.ouroboros.enable=true
