@@ -169,4 +169,5 @@ services:
     networks:
       - home_assistant-private
     volumes:
-      -  ${TECHNOCORE_DATA}/signal-api:/home/.local/share/signal-cli" #map "signal-cli-config" folder on host system into docker container. the folder contains the password and cryptographic keys when a new number is registered
+      # map "signal-cli-config" folder on host system into docker container. the folder contains the password and cryptographic keys when a new number is registered
+      -  ${TECHNOCORE_DATA}/signal-api:/home/.local/share/signal-cli

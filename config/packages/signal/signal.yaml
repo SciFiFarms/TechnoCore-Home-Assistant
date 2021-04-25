@@ -3,7 +3,27 @@ notify:
   - name: signal
     platform: signal_messenger
     url: "http://signal_api:8080" # the URL where the Signal Messenger REST API is listening
-    number: "!env_var SIGNAL_API_SEND_NUMBER"
+    number: !env_var SIGNAL_API_SEND_NUMBER
     recipients: # one or more recipients
-      - "!env_var SIGNAL_API_RECEIVE_NUMBER"
+      - !env_var SIGNAL_API_RECEIVE_NUMBER
 
+  - name: signal_number_reserve
+    platform: signal_messenger
+    url: "http://signal_api:8080" # the URL where the Signal Messenger REST API is listening
+    number: !env_var SIGNAL_API_SEND_NUMBER
+    recipients: # one or more recipients
+      - !env_var SIGNAL_API_SEND_NUMBER
+
+automation:
+  # Without this, we'd lose registration lock after 7 days.
+  - alias: Reserve Signal Number
+    description: ''
+    trigger:
+      - platform: time
+        at: '12:00'
+    condition: []
+    action:
+      - service: notify.signal_number_reserve
+        data:
+          message: Reserve this number please.
+    mode: single
