@@ -23,6 +23,8 @@ var:
     friendly_name: 'Water Supply Mode Entities'
   seedship_drainage_entities:
     friendly_name: 'SeedShip Drainage Entities'
+  seedship_water_nozzle_entities:
+    friendly_name: 'SeedShip Water Nozzle Entities'
 
 lovelace:
   dashboards:

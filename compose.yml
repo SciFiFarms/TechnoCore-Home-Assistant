@@ -146,3 +146,25 @@ services:
     volumes:
       - home-assistant-db:/var/lib/postgresql/data
       #- ${home_assistant_db_live_mount:-./empty/:/opt/.dummy}
+
+  # TODO: Make this it's own service. Could maybe connect with Grafana?
+  signal-api:
+    deploy:
+      labels:
+        - com.ouroboros.enable=true
+      mode: global
+      restart_policy:
+        condition: any
+    environment:
+      - USE_NATIVE=1
+      - PORT=8080
+    #image: ${image_provider:-scififarms}/technocore-home-assistant-db:${TAG:-latest}
+    image: eightiesguy/signal-addon:latest
+    logging:
+      driver: "${LOGGING_DRIVER}"
+      options:
+        tag: "{{.Name}}"
+    networks:
+      - home_assistant-private
+    volumes:
+      -  ${TECHNOCORE_DATA}/signal-api:/home/.local/share/signal-cli" #map "signal-cli-config" folder on host system into docker container. the folder contains the password and cryptographic keys when a new number is registered
