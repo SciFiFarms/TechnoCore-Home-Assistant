@@ -92,6 +92,8 @@ services:
       - DOCKER_HOSTNAME=${HOSTNAME}
       - ADMIN_USER=${ADMIN_USER}
       - DOMAIN=${DOMAIN}
+      - SIGNAL_API_SEND_NUMBER=${SIGNAL_API_SEND_NUMBER:-+12345678901}
+      - SIGNAL_API_RECEIVE_NUMBER=${SIGNAL_API_RECEIVE_NUMBER:-+12345678901}
     image: ${image_provider:-scififarms}/technocore-home-assistant:${TAG:-latest}
     logging:
       driver: "${LOGGING_DRIVER}"
