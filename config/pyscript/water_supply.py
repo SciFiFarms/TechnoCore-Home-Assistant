@@ -4,7 +4,11 @@ import re
 
 @service
 def add_entity_to_list_var(entity=None, list_var=None):
-    entities = json.loads( state.get(f'var.{ list_var }') )
+    if state.get(f"var.{ list_var }") != "unknown":
+        entities = json.loads( state.get(f'var.{ list_var }') )
+    else:
+        entities = json.loads( "[]" )
+
     if not entities:
         entities = []
 
