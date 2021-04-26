@@ -22,6 +22,11 @@
                 "url": "local/layout-card.js",
                 "type": "module",
                 "id": "35f46fa6932e4258b5de9575ff71371c"
+            },
+            {
+                "url": "local/card-mod.js",
+                "type": "module",
+                "id": "d01e939274ff46ad972b6b29a014b1fd"
             }
         ]
     }
