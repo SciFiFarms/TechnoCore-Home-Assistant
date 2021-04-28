@@ -26,6 +26,9 @@ var:
   seedship_water_nozzle_entities:
     friendly_name: 'SeedShip Water Nozzle Entities'
 
+  lists_of_entities:
+    friendly_name: 'Lists of Entities'
+
 lovelace:
   dashboards:
     lovelace-seedship:

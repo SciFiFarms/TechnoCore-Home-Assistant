@@ -17,7 +17,7 @@ views:
                     style: |
                       :host {
                         --card-mod-icon-color:
-                        {% if 'this.entity_id' in states('var.water_supply_mode_entities') %}
+                        {% if 'this.entity_id' in state_attr('var.lists_of_entities', 'water_supply_mode_entities') %}
                           green
                         {% else %}
                           red
@@ -55,7 +55,8 @@ views:
                 name: Clear Mode Entities
                 icon: 'hass:lightbulb'
           - type: entity
-            entity: var.water_supply_mode_entities
+            entity: var.lists_of_entities
+            attribute: water_supply_mode_entities
       - type: vertical-stack
         cards:
           - type: 'custom:auto-entities'
@@ -69,7 +70,7 @@ views:
                     style: |
                       :host {
                         --card-mod-icon-color:
-                        {% if 'this.entity_id' in states('var.seedship_drainage_entities') %}
+                        {% if 'this.entity_id' in state_attr('var.lists_of_entities' ,'seedship_drainage_entities') %}
                           green
                         {% else %}
                           red
@@ -106,7 +107,8 @@ views:
                 name: Clear Drainage Entities
                 icon: 'hass:lightbulb'
           - type: entity
-            entity: var.seedship_drainage_entities
+            entity: var.lists_of_entities
+            attribute: seedship_drainage_entities
       - type: vertical-stack
         cards:
           - type: 'custom:auto-entities'
@@ -120,7 +122,7 @@ views:
                     style: |
                       :host {
                         --card-mod-icon-color:
-                        {% if 'this.entity_id' in states('var.seedship_water_nozzle_entities') %}
+                        {% if 'this.entity_id' in state_attr('var.lists_of_entities', 'seedship_water_nozzle_entities') %}
                           green
                         {% else %}
                           red
@@ -157,7 +159,8 @@ views:
                 name: Clear Water Nozzle Entities
                 icon: 'hass:lightbulb'
           - type: entity
-            entity: var.seedship_water_nozzle_entities
+            entity: var.lists_of_entities
+            attribute: seedship_water_nozzle_entities
       - type: vertical-stack
         cards:
           - type: 'custom:auto-entities'
@@ -171,7 +174,7 @@ views:
                     style: |
                       :host {
                         --card-mod-icon-color:
-                        {% if 'this.entity_id' in states('var.seedship_water_nozzle_entities') %}
+                        {% if 'this.entity_id' in state_attr('var.lists_of_entities', 'seedship_water_nozzle_entities') %}
                           green
                         {% else %}
                           red
@@ -209,4 +212,6 @@ views:
                 name: Clear Water Nozzle Entities
                 icon: 'hass:lightbulb'
           - type: entity
-            entity: var.seedship_water_nozzle_entities
+            entity: var.lists_of_entities
+      - type: entity
+        entity: var.lists_of_entities

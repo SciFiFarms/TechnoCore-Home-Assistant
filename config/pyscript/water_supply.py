@@ -1,11 +1,12 @@
 import json
 import re
 
+var_entity = "var.lists_of_entities"
 
 @service
 def add_entity_to_list_var(entity=None, list_var=None):
-    if state.get(f"var.{ list_var }") != "unknown":
-        entities = json.loads( state.get(f'var.{ list_var }') )
+    if state.getattr(var_entity).get(list_var, "unknown") != "unknown":
+        entities = json.loads( state.getattr(var_entity).get(list_var) )
     else:
         entities = json.loads( "[]" )
 
@@ -17,7 +18,7 @@ def add_entity_to_list_var(entity=None, list_var=None):
     else:
         entities = entities + [entity]
 
-    state.set(f'var.{ list_var }', json.dumps( entities ) )
+    state.setattr(f'{ var_entity }.{ list_var }', json.dumps( entities ) )
     #log.warning(f"{ entities }")
 
 @service
@@ -34,7 +35,7 @@ def send_state_to_entities_list(list_var=None, topic=None, state_entity=None, nu
 @service
 def send_mqtt_to_entities_list(list_var=None, topic=None, payload=None, retain=False):
 
-    entities = json.loads( state.get(f'var.{ list_var }') )
+    entities = json.loads( state.getattr(var_entity).get( list_var ) )
     #log.warning(f"{ payload }")
     for entity in entities:
         entity = re.sub('.*\.(.*\d+).*', '\\1', entity)
@@ -46,7 +47,7 @@ def send_mqtt_to_entities_list(list_var=None, topic=None, payload=None, retain=F
 @service
 def clear_entities_list_var(list_var=None):
     #log.warning(f"{ list_var }")
-    state.set(f'var.{ list_var }',  "[]" )
+    state.setattr(f'{ var_entity}.{ list_var }',  "[]" )
 
 @mqtt_trigger("seedship/+/warnings", "payload.startswith('CRITICAL')")
 def received_critical_warning(**kwargs):
