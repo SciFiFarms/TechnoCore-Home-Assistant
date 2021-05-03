@@ -130,9 +130,15 @@ views:
                         postfix: _mode
             sort:
               method: none
-          - type: entity
-            entity: var.lists_of_entities
-            attribute: water_supply_entities
+          - type: markdown
+            content: >-
+              {% set entities = state_attr('var.lists_of_entities',
+              'water_supply_entities')  |from_json %}
+
+              {%- for entity in entities -%}
+                    - {{ entity }}
+              {%- endfor %}
+            title: Currently Selected Water Supply Entities
       - type: vertical-stack
         cards:
           - type: 'custom:auto-entities'
@@ -162,9 +168,15 @@ views:
                         list_var: seedship_entities
             sort:
               method: entity_id
-          - type: entity
-            entity: var.lists_of_entities
-            attribute: seedship_entities
+          - type: markdown
+            content: >-
+              {% set entities = state_attr('var.lists_of_entities',
+              'seedship_entities')  |from_json %}
+
+              {%- for entity in entities -%}
+                    - {{ entity }}
+              {%- endfor %}
+            title: Currently Selected SeedShip Entities
       - type: vertical-stack
         cards:
           - type: 'custom:auto-entities'
