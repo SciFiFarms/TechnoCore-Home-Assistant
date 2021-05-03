@@ -9,15 +9,15 @@ views:
           - type: 'custom:auto-entities'
             card:
               type: entities
-              title: Water Supply Mode
+              title: Water Supply PSI
             filter:
               include:
-                - entity_id: /water_supply.*mode$/
+                - entity_id: /water_supply.*psi$/
                   options:
                     style: |
                       :host {
                         --card-mod-icon-color:
-                        {% if 'this.entity_id' in state_attr('var.lists_of_entities', 'water_supply_mode_entities') %}
+                        {% if 'this.entity_id'.replace('_psi', '') in state_attr('var.lists_of_entities', 'seedship_entities') %}
                           green
                         {% else %}
                           red
@@ -29,9 +29,44 @@ views:
                       service: pyscript.add_entity_to_list_var
                       service_data:
                         entity: this.entity_id
-                        list_var: water_supply_mode_entities
+                        list_var: seedship_entities
+                        postfix: _psi
+                - entity_id: /water_supply.*warnings$/
+                - entity_id: /.*clean_water_dosage$/
             sort:
-              method: none
+              method: entity_id
+          - type: horizontal-stack
+            cards:
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: pyscript.send_mqtt_to_entities_list
+                  service_data:
+                    topic: seedship/water_supply_01/bus_request_access
+                    payload: THIS_ENTITY_root_zone
+                    retain: false
+                    list_var: seedship_entities
+                icon: 'hass:lightbulb'
+                name: Run Misting
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: pyscript.send_mqtt_to_entities_list
+                  service_data:
+                    topic: seedship/water_supply_01/drainage_bus_request_access
+                    payload: THIS_ENTITY_root_zone
+                    retain: false
+                    list_var: seedship_entities
+                icon: 'hass:lightbulb'
+                name: Run Drainage
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: pyscript.clear_entities_list_var
+                  service_data:
+                    list_var: seedship_entities
+                name: Clear SeedShip Entities
+                icon: 'hass:lightbulb'
           - type: horizontal-stack
             cards:
               - type: button
@@ -43,34 +78,43 @@ views:
                     state_entity: input_select.water_supply_mode
                     numbers_only: true
                     retain: true
-                    list_var: water_supply_mode_entities
+                    list_var: water_supply_entities
                 name: Set Mode
+                icon: 'hass:lightbulb'
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: pyscript.send_state_to_entities_list
+                  service_data:
+                    topic: seedship/THIS_ENTITY/clean_water_dosage
+                    state_entity: input_select.water_supply_clean_water_dosage
+                    numbers_only: true
+                    retain: true
+                    list_var: water_supply_entities
+                name: Set Clean Water Dosage
                 icon: 'hass:lightbulb'
               - type: button
                 tap_action:
                   action: call-service
                   service: pyscript.clear_entities_list_var
                   service_data:
-                    list_var: water_supply_mode_entities
-                name: Clear Mode Entities
+                    list_var: water_supply_entities
+                name: Clear Water Supply Entities
                 icon: 'hass:lightbulb'
-          - type: entity
-            entity: var.lists_of_entities
-            attribute: water_supply_mode_entities
       - type: vertical-stack
         cards:
           - type: 'custom:auto-entities'
             card:
               type: entities
-              title: SeedShip Drainage
+              title: Water Supply Mode
             filter:
               include:
-                - entity_id: /seedship.*drainage$/
+                - entity_id: /water_supply.*mode$/
                   options:
                     style: |
                       :host {
                         --card-mod-icon-color:
-                        {% if 'this.entity_id' in state_attr('var.lists_of_entities' ,'seedship_drainage_entities') %}
+                        {% if 'this.entity_id'.replace('_mode', '').replace("sensor.", "")  in state_attr('var.lists_of_entities', 'water_supply_entities') %}
                           green
                         {% else %}
                           red
@@ -82,39 +126,51 @@ views:
                       service: pyscript.add_entity_to_list_var
                       service_data:
                         entity: this.entity_id
-                        list_var: seedship_drainage_entities
+                        list_var: water_supply_entities
+                        postfix: _mode
             sort:
-              method: entity_id
-          - type: horizontal-stack
-            cards:
-              - type: button
-                tap_action:
-                  action: call-service
-                  service: pyscript.send_mqtt_to_entities_list
-                  service_data:
-                    topic: seedship/water_supply_01/drainage_bus_request_access
-                    payload: THIS_ENTITY_root_zone
-                    retain: false
-                    list_var: seedship_drainage_entities
-                icon: 'hass:lightbulb'
-                name: Run Drainage
-              - type: button
-                tap_action:
-                  action: call-service
-                  service: pyscript.clear_entities_list_var
-                  service_data:
-                    list_var: seedship_drainage_entities
-                name: Clear Drainage Entities
-                icon: 'hass:lightbulb'
+              method: none
           - type: entity
             entity: var.lists_of_entities
-            attribute: seedship_drainage_entities
+            attribute: water_supply_entities
       - type: vertical-stack
         cards:
           - type: 'custom:auto-entities'
             card:
               type: entities
-              title: SeedShip Misting
+              title: SeedShip Mode
+            filter:
+              include:
+                - entity_id: /seedship.*mode$/
+                  options:
+                    style: |
+                      :host {
+                        --card-mod-icon-color:
+                        {% if 'this.entity_id'.replace("sensor.", "").replace("_mode", "") in state_attr('var.lists_of_entities' ,'seedship_entities') %}
+                          green
+                        {% else %}
+                          red
+                        {% endif %}
+                        ;
+                      }
+                    tap_action:
+                      action: call-service
+                      service: pyscript.add_entity_to_list_var
+                      service_data:
+                        postfix: _mode
+                        entity: this.entity_id
+                        list_var: seedship_entities
+            sort:
+              method: entity_id
+          - type: entity
+            entity: var.lists_of_entities
+            attribute: seedship_entities
+      - type: vertical-stack
+        cards:
+          - type: 'custom:auto-entities'
+            card:
+              type: entities
+              title: SeedShip Water Nozzels
             filter:
               include:
                 - entity_id: /seedship.*water_nozzle$/
@@ -122,7 +178,7 @@ views:
                     style: |
                       :host {
                         --card-mod-icon-color:
-                        {% if 'this.entity_id' in state_attr('var.lists_of_entities', 'seedship_water_nozzle_entities') %}
+                        {% if 'this.entity_id'.replace('_root_zone_water_nozzle', '').replace("switch.", "") in state_attr('var.lists_of_entities', 'seedship_entities') %}
                           green
                         {% else %}
                           red
@@ -133,85 +189,14 @@ views:
                       action: call-service
                       service: pyscript.add_entity_to_list_var
                       service_data:
+                        postfix: _root_zone_water_nozzle
                         entity: this.entity_id
-                        list_var: seedship_water_nozzle_entities
+                        list_var: seedship_entities
             sort:
               method: entity_id
-          - type: horizontal-stack
-            cards:
-              - type: button
-                tap_action:
-                  action: call-service
-                  service: pyscript.send_mqtt_to_entities_list
-                  service_data:
-                    topic: seedship/THIS_ENTITY/root_zone_water_nozzle/dose
-                    payload: 1
-                    retain: false
-                    list_var: seedship_water_nozzle_entities
-                icon: 'hass:lightbulb'
-                name: Run Misting
-              - type: button
-                tap_action:
-                  action: call-service
-                  service: pyscript.clear_entities_list_var
-                  service_data:
-                    list_var: seedship_water_nozzle_entities
-                name: Clear Water Nozzle Entities
-                icon: 'hass:lightbulb'
-          - type: entity
-            entity: var.lists_of_entities
-            attribute: seedship_water_nozzle_entities
-      - type: vertical-stack
-        cards:
-          - type: 'custom:auto-entities'
-            card:
-              type: entities
-              title: Water Supply PSI
-            filter:
-              include:
-                - entity_id: /water_supply.*psi$/
-                  options:
-                    style: |
-                      :host {
-                        --card-mod-icon-color:
-                        {% if 'this.entity_id' in state_attr('var.lists_of_entities', 'seedship_water_nozzle_entities') %}
-                          green
-                        {% else %}
-                          red
-                        {% endif %}
-                        ;
-                      }
-                    tap_action:
-                      action: call-service
-                      service: pyscript.add_entity_to_list_var
-                      service_data:
-                        entity: this.entity_id
-                        list_var: seedship_water_nozzle_entities
-                - entity_id: /water_supply.*warnings$/
-            sort:
-              method: entity_id
-          - type: horizontal-stack
-            cards:
-              - type: button
-                tap_action:
-                  action: call-service
-                  service: pyscript.send_mqtt_to_entities_list
-                  service_data:
-                    topic: seedship/THIS_ENTITY/root_zone_water_nozzle/dose
-                    payload: 1
-                    retain: false
-                    list_var: seedship_water_nozzle_entities
-                icon: 'hass:lightbulb'
-                name: Run Misting
-              - type: button
-                tap_action:
-                  action: call-service
-                  service: pyscript.clear_entities_list_var
-                  service_data:
-                    list_var: seedship_water_nozzle_entities
-                name: Clear Water Nozzle Entities
-                icon: 'hass:lightbulb'
-          - type: entity
-            entity: var.lists_of_entities
+  - title: Debug
+    path: debug
+    badges: []
+    cards:
       - type: entity
         entity: var.lists_of_entities

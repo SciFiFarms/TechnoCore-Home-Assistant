@@ -4,7 +4,7 @@ import re
 var_entity = "var.lists_of_entities"
 
 @service
-def add_entity_to_list_var(entity=None, list_var=None):
+def add_entity_to_list_var(entity=None, list_var=None, postfix=None):
     if state.getattr(var_entity).get(list_var, "unknown") != "unknown":
         entities = json.loads( state.getattr(var_entity).get(list_var) )
     else:
@@ -12,6 +12,8 @@ def add_entity_to_list_var(entity=None, list_var=None):
 
     if not entities:
         entities = []
+
+    entity = re.sub(f".*\.(.*){ postfix }", "\\1", entity )
 
     if entity in entities:
         entities.remove(entity)
@@ -40,9 +42,9 @@ def send_mqtt_to_entities_list(list_var=None, topic=None, payload=None, retain=F
     for entity in entities:
         entity = re.sub('.*\.(.*\d+).*', '\\1', entity)
         #log.warning(f"{ entity }")
-        service.call("mqtt", "publish", topic=topic.replace("THIS_ENTITY", entity), payload=payload.replace("THIS_ENTITY", entity), retain=retain)
+        service.call("mqtt", "publish", topic=topic.replace("THIS_ENTITY", entity), payload=payload.replace("THIS_ENTITY", entity ), retain=retain)
 
-        log.warning(f"{ topic.replace('THIS_ENTITY',  entity ) }")
+        log.warning(f"{ topic.replace('THIS_ENTITY',  entity ) }" )
 
 @service
 def clear_entities_list_var(list_var=None):

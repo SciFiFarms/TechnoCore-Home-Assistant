@@ -7,7 +7,12 @@ input_select:
     - "MODE_MANUAL_OVERRIDE: 2"
     - "MODE_CALIBRATION: 3"
     - "MODE_WATER_SUPPLY_ERROR: 4"
-
+  water_supply_clean_water_dosage:
+    name: Water Supply Clean Water Dosage
+    options:
+    - "450000"
+    - "900000"
+    - "1800000"
 pyscript:
 
 
