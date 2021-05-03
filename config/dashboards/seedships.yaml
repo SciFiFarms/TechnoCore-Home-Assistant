@@ -86,7 +86,7 @@ views:
                   action: call-service
                   service: pyscript.send_state_to_entities_list
                   service_data:
-                    topic: seedship/THIS_ENTITY/clean_water_dosage
+                    topic: seedship/THIS_ENTITY/clean_water/set_dosage
                     state_entity: input_select.water_supply_clean_water_dosage
                     numbers_only: true
                     retain: true
@@ -136,7 +136,7 @@ views:
               'water_supply_entities')  |from_json %}
 
               {%- for entity in entities -%}
-                    - {{ entity }}
+                    - {{ entity + "\n" }}
               {%- endfor %}
             title: Currently Selected Water Supply Entities
       - type: vertical-stack
@@ -174,7 +174,7 @@ views:
               'seedship_entities')  |from_json %}
 
               {%- for entity in entities -%}
-                    - {{ entity }}
+                    - {{ entity + "\n" }}
               {%- endfor %}
             title: Currently Selected SeedShip Entities
       - type: vertical-stack

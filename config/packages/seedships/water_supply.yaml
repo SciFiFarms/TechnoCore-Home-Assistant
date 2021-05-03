@@ -10,9 +10,9 @@ input_select:
   water_supply_clean_water_dosage:
     name: Water Supply Clean Water Dosage
     options:
-    - "450000"
-    - "900000"
-    - "1800000"
+    - "7.5 Minutes: 450000"
+    - "15 Minutes: 900000"
+    - "30 Minutes: 1800000"
 pyscript:
 
 
