@@ -3,6 +3,7 @@ ignored_entities:
   entities:
     - binary_sensor.updater
     - sensor.unavailable_entities
+    - var.lists_of_entities
     - sensor.seedship_03_shoot_zone_lux
     - sensor.seedship_04_shoot_zone_lux
     - sensor.seedship_05_shoot_zone_lux
