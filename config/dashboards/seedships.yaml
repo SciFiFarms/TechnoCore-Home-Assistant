@@ -32,7 +32,9 @@ views:
                         list_var: seedship_entities
                         postfix: _psi
                 - entity_id: /water_supply.*warnings$/
-                - entity_id: /.*clean_water_dosage$/
+                - entity_id: /water_supply.*bus_requests/
+                - entity_id: /water_supply.*clean_water/
+                - entity_id: /water_supply.*water_line/
             sort:
               method: entity_id
           - type: horizontal-stack
@@ -141,33 +143,6 @@ views:
             title: Currently Selected Water Supply Entities
       - type: vertical-stack
         cards:
-          - type: 'custom:auto-entities'
-            card:
-              type: entities
-              title: SeedShip Mode
-            filter:
-              include:
-                - entity_id: /seedship.*mode$/
-                  options:
-                    style: |
-                      :host {
-                        --card-mod-icon-color:
-                        {% if 'this.entity_id'.replace("sensor.", "").replace("_mode", "") in state_attr('var.lists_of_entities' ,'seedship_entities') %}
-                          green
-                        {% else %}
-                          red
-                        {% endif %}
-                        ;
-                      }
-                    tap_action:
-                      action: call-service
-                      service: pyscript.add_entity_to_list_var
-                      service_data:
-                        postfix: _mode
-                        entity: this.entity_id
-                        list_var: seedship_entities
-            sort:
-              method: entity_id
           - type: markdown
             content: >-
               {% set entities = state_attr('var.lists_of_entities',
@@ -212,3 +187,169 @@ views:
     cards:
       - type: entity
         entity: var.lists_of_entities
+  - title: Shoot Zone
+    path: shoot-zone
+    icon: 'hass:leaf'
+    badges: []
+    cards:
+      - type: 'custom:auto-entities'
+        card:
+          type: entities
+        filter:
+          include:
+            - entity_id: /seedship.*vpd/
+          exclude: []
+        sort:
+          method: entity_id
+      - type: 'custom:auto-entities'
+        card:
+          type: entities
+        filter:
+          include:
+            - entity_id: /seedship.*co2$/
+          exclude: []
+        sort:
+          method: entity_id
+  - title: Targets
+    path: targets
+    icon: 'hass:target'
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: 'custom:auto-entities'
+            card:
+              type: entities
+              title: Calibration Options
+            filter:
+              include:
+                - entity_id: /input_select.calibration.*/
+              exclude: []
+          - type: 'custom:auto-entities'
+            card:
+              type: entities
+              title: TESTING
+            filter:
+              template: |-
+                {{ states.sensor
+                 | selectattr('attributes.unit_of_measurement', '==', states('input_select.calibration_unit_selector') )
+                 | list
+                 | map(attribute='entity_id')
+                 | join(',')
+                }}
+            sort:
+              method: none
+      - type: vertical-stack
+        cards:
+          - type: 'custom:auto-entities'
+            card:
+              type: entities
+              title: Calibrated Entities
+            filter:
+              include:
+                - entity_id: /.*_calibrated$/
+                  options:
+                    style: |
+                      :host {
+                        --card-mod-icon-color:
+                        {% if 'this.entity_id'.replace('_calibrated', '').replace("sensor.", "")  in state_attr('var.lists_of_entities', 'calibrated_entities') %}
+                          green
+                        {% else %}
+                          red
+                        {% endif %}
+                        ;
+                      }
+                    tap_action:
+                      action: call-service
+                      service: pyscript.add_entity_to_list_var
+                      service_data:
+                        entity: this.entity_id
+                        list_var: calibrated_entities
+                        postfix: _calibrated
+            sort:
+              method: none
+          - type: markdown
+            content: >-
+              {% set entities = state_attr('var.lists_of_entities',
+              'calibrated_entities')  |from_json %}
+
+              {%- for entity in entities -%}
+                    - {{ entity + "\n" }}
+              {%- endfor %}
+            title: Currently Selected Calibrated Sensors
+      - type: vertical-stack
+        cards:
+          - type: 'custom:auto-entities'
+            card:
+              type: entities
+              title: Raw Entities
+            filter:
+              include:
+                - entity_id: /.*_raw$/
+                  options:
+                    style: |
+                      :host {
+                        --card-mod-icon-color:
+                        {% if 'this.entity_id'.replace('_raw', '').replace("sensor.", "")  in state_attr('var.lists_of_entities', 'raw_entities') %}
+                          green
+                        {% else %}
+                          red
+                        {% endif %}
+                        ;
+                      }
+                    tap_action:
+                      action: call-service
+                      service: pyscript.add_entity_to_list_var
+                      service_data:
+                        entity: this.entity_id
+                        list_var: raw_entities
+                        postfix: _raw
+            sort:
+              method: none
+          - type: markdown
+            content: >-
+              {% set entities = state_attr('var.lists_of_entities',
+              'raw_entities')  |from_json %}
+
+              {%- for entity in entities -%}
+                    - {{ entity + "\n" }}
+              {%- endfor %}
+            title: Currently Selected Raw Sensors
+      - type: vertical-stack
+        cards:
+          - type: 'custom:auto-entities'
+            card:
+              type: entities
+              title: Calibration Entities
+            filter:
+              include:
+                - entity_id: /.*_calibration$/
+                  options:
+                    style: |
+                      :host {
+                        --card-mod-icon-color:
+                        {% if 'this.entity_id'.replace('_calibration', '').replace("sensor.", "")  in state_attr('var.lists_of_entities', 'calibration_entities') %}
+                          green
+                        {% else %}
+                          red
+                        {% endif %}
+                        ;
+                      }
+                    tap_action:
+                      action: call-service
+                      service: pyscript.add_entity_to_list_var
+                      service_data:
+                        entity: this.entity_id
+                        list_var: calibration_entities
+                        postfix: _calibration
+            sort:
+              method: none
+          - type: markdown
+            content: >-
+              {% set entities = state_attr('var.lists_of_entities',
+              'calibration_entities')  |from_json %}
+
+              {%- for entity in entities -%}
+                    - {{ entity + "\n" }}
+              {%- endfor %}
+            title: Currently Selected Calibration

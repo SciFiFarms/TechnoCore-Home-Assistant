@@ -55,3 +55,20 @@ def clear_entities_list_var(list_var=None):
 def received_critical_warning(**kwargs):
     service.call("notify", "signal", message=kwargs['payload'])
 
+
+
+@service
+def populate_good_calibration_sensors(entity="input_select.calibration_good_sensor_selector", result=None):
+    log.warning(f"got entity {entity}, result {result}")
+
+    # Domain must be input_select.
+    if not entity.startswith("input_select."):
+        log.error("input entity must be domain input_select, exiting")
+
+    options = result.split(",")
+    all_options = []
+    options.sort()
+    log.debug(f"option list {options}")
+
+    # Populate the input select.
+    input_select.set_options(entity_id=entity, options=options)
