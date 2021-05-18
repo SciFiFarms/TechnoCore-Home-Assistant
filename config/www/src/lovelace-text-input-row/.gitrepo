@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/gadgetchnnel/lovelace-text-input-row.git
+	branch = master
+	commit = 2b1e1ff838189b375895a7755a6db784389c9514
+	parent = 4d8004af044311f73dceea7331461b985b3fd149
+	method = merge
+	cmdver = 0.4.0
