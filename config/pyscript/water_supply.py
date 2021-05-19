@@ -1,6 +1,8 @@
 import json
 import re
 
+from homeassistant.const import EVENT_HOMEASSISTANT_STARTED
+
 var_entity = "var.lists_of_entities"
 
 @service
@@ -56,19 +58,33 @@ def received_critical_warning(**kwargs):
     service.call("notify", "signal", message=kwargs['payload'])
 
 
-
+@state_trigger("True", watch=["input_select.calibration_unit_selector"])
 @service
-def populate_good_calibration_sensors(entity="input_select.calibration_good_sensor_selector", result=None):
-    log.warning(f"got entity {entity}, result {result}")
-
-    # Domain must be input_select.
-    if not entity.startswith("input_select."):
-        log.error("input entity must be domain input_select, exiting")
-
-    options = result.split(",")
-    all_options = []
-    options.sort()
+def populate_good_calibration_sensors():
+    options = []
+    desired_unit = state.get("input_select.calibration_unit_selector")
+    for entity_id in state.names():
+        unit = state.getattr(entity_id).get("unit_of_measurement")
+        log.warning(f"unit: {unit}")
+        log.warning(f"desired_unit: {desired_unit}")
+        if unit == desired_unit:
+            options.append(entity_id)
     log.debug(f"option list {options}")
+    options.sort()
 
-    # Populate the input select.
-    input_select.set_options(entity_id=entity, options=options)
+    input_select.set_options(entity_id="input_select.calibration_good_sensor_selector", options=["input_text.calibration_manual_input"] + options)
+
+@time_trigger
+@service
+def populate_unit_selectors():
+    options = [" "]
+    for entity_id in state.names():
+        unit = state.getattr(entity_id).get("unit_of_measurement")
+        if unit != None and not unit in options:
+            options.append(unit)
+
+    options.sort()
+    log.warning(f"options: { options }")
+
+    input_select.set_options(entity_id="input_select.calibration_unit_selector", options=options)
+    input_select.set_options(entity_id="input_select.calibration_raw_unit_selector", options=["raw"] + options)

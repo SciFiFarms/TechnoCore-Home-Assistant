@@ -24,6 +24,11 @@
                 "id": "35f46fa6932e4258b5de9575ff71371c"
             },
             {
+                "url": "local/lovelace-text-input-row.js",
+                "type": "module",
+                "id": "b8b0027eeed549b199ea4a5ec620ef91"
+            },
+            {
                 "url": "local/card-mod.js",
                 "type": "module",
                 "id": "d01e939274ff46ad972b6b29a014b1fd"

@@ -21,40 +21,18 @@ input_select:
   calibration_good_sensor_selector:
     name: Calibration Good Sensor Selector
     options:
-    - "psi"
     - "raw"
   calibration_raw_unit_selector:
-    name: Calibration Good Sensor Selector
+    name: Calibration Raw Unit Selector
     options:
-    - "psi"
     - "raw"
+
+input_text:
+  calibration_manual_input:
+    name: Calibration Manual Input
+
 pyscript:
 
-
-automation:
-  - id: 'populate_input_select_calibration_good_sensor_selector'
-    alias: Populate input_select.calibration_good_sensor_selector
-    description: ''
-    trigger:
-    - platform: state
-      entity_id: input_select.calibration_unit_selector
-    - platform: homeassistant
-      event: start
-    condition: []
-    action:
-    - service: pyscript.populate_good_calibration_sensors
-      data:
-        entity: input_select.calibration_good_sensor_selector
-        result: "{{ states.sensor \n | selectattr('attributes.unit_of_measurement',\
-          \ '==', states('input_select.calibration_unit_selector') ) \n | list \n |\
-          \ map(attribute='entity_id')\n | join(',')\n}}\n"
-    mode: single
-
-#- alias: "Set Water Supply Mode Selector"
-#  trigger:
-#    platform: state
-#    entity_id: sensor.water_supply_01_mode
-#  action:
 
 var:
   water_supply_mode_entities:
