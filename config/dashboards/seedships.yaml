@@ -223,98 +223,20 @@ views:
               title: Calibration Options
             filter:
               include:
-                - entity_id: /input_select.calibration.*/
+                - entity_id: /input_select\.calibration.*/
               exclude: []
-          - type: 'custom:auto-entities'
-            card:
-              type: entities
-              title: TESTING
-            filter:
-              template: |-
-                {{ states.sensor
-                 | selectattr('attributes.unit_of_measurement', '==', states('input_select.calibration_unit_selector') )
-                 | list
-                 | map(attribute='entity_id')
-                 | join(',')
-                }}
-            sort:
-              method: none
-      - type: vertical-stack
-        cards:
-          - type: 'custom:auto-entities'
-            card:
-              type: entities
-              title: Calibrated Entities
-            filter:
-              include:
-                - entity_id: /.*_calibrated$/
-                  options:
-                    style: |
-                      :host {
-                        --card-mod-icon-color:
-                        {% if 'this.entity_id'.replace('_calibrated', '').replace("sensor.", "")  in state_attr('var.lists_of_entities', 'calibrated_entities') %}
-                          green
-                        {% else %}
-                          red
-                        {% endif %}
-                        ;
-                      }
-                    tap_action:
-                      action: call-service
-                      service: pyscript.add_entity_to_list_var
-                      service_data:
-                        entity: this.entity_id
-                        list_var: calibrated_entities
-                        postfix: _calibrated
-            sort:
-              method: none
-          - type: markdown
-            content: >-
-              {% set entities = state_attr('var.lists_of_entities',
-              'calibrated_entities')  |from_json %}
-
-              {%- for entity in entities -%}
-                    - {{ entity + "\n" }}
-              {%- endfor %}
-            title: Currently Selected Calibrated Sensors
-      - type: vertical-stack
-        cards:
-          - type: 'custom:auto-entities'
-            card:
-              type: entities
-              title: Raw Entities
-            filter:
-              include:
-                - entity_id: /.*_raw$/
-                  options:
-                    style: |
-                      :host {
-                        --card-mod-icon-color:
-                        {% if 'this.entity_id'.replace('_raw', '').replace("sensor.", "")  in state_attr('var.lists_of_entities', 'raw_entities') %}
-                          green
-                        {% else %}
-                          red
-                        {% endif %}
-                        ;
-                      }
-                    tap_action:
-                      action: call-service
-                      service: pyscript.add_entity_to_list_var
-                      service_data:
-                        entity: this.entity_id
-                        list_var: raw_entities
-                        postfix: _raw
-            sort:
-              method: none
-          - type: markdown
-            content: >-
-              {% set entities = state_attr('var.lists_of_entities',
-              'raw_entities')  |from_json %}
-
-              {%- for entity in entities -%}
-                    - {{ entity + "\n" }}
-              {%- endfor %}
-            title: Currently Selected Raw Sensors
+          - type: entities
+            entities:
+              - entity: input_text.calibration_manual_input
+                type: 'custom:text-input-row'
+              - type: call-service
+                name: ' '
+                icon: 'mdi:target-variant'
+                action_name: Take Calibration Reading
+                service: pyscript.calibration_reading
+                data_template:
+                  reading:
+                    '[object Object]': null
       - type: vertical-stack
         cards:
           - type: 'custom:auto-entities'
@@ -353,3 +275,49 @@ views:
                     - {{ entity + "\n" }}
               {%- endfor %}
             title: Currently Selected Calibration
+      - type: vertical-stack
+        cards:
+          - type: 'custom:auto-entities'
+            card:
+              type: entities
+              title: Raw Entities - Make postfix dynamic.
+            filter:
+              template: >-
+                {% set data = namespace(entities=[]) %} {% set raw_entities =
+                "[]" if not state_attr('var.lists_of_entities', 'raw_entities')
+                else state_attr('var.lists_of_entities', 'raw_entities') %} {%
+                for ent in states.sensor
+                 | selectattr('attributes.unit_of_measurement', '==', states('input_select.calibration_unit_selector') )
+                 | list
+                 | map(attribute='entity_id')
+                -%}
+                  {% if ent.replace('_raw', '').replace("sensor.", "") in raw_entities %}
+                    {% set color = "green;" %}
+                  {% else %}
+                    {% set color = "red;" %}
+                  {% endif %}
+                  {% set style = ":host { --card-mod-icon-color: " + color + "}" %}
+                  {%- set data.entities = data.entities + [{'entity': ent,
+                              'style': style,
+                              'tap_action': {
+                                'action': 'call-service',
+                                'service': 'pyscript.add_entity_to_list_var',
+                                'service_data': {
+                                  'entity': ent,
+                                  'list_var': 'raw_entities',
+                                  'postfix': '_raw'
+                                  }
+                                },
+                              }] -%}
+                {%- endfor -%} {{ data.entities }}
+            sort:
+              method: none
+          - type: markdown
+            content: >-
+              {% set entities = state_attr('var.lists_of_entities',
+              'raw_entities')  |from_json %}
+
+              {%- for entity in entities -%}
+                    - {{ entity + "\n" }}
+              {%- endfor %}
+            title: Currently Selected Raw Sensors

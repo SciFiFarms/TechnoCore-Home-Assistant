@@ -4,6 +4,8 @@ ignored_entities:
     - binary_sensor.updater
     - sensor.unavailable_entities
     - var.lists_of_entities
+    - binary_sensor.remote_ui
+    - input_text.calibration_manual_input
     - sensor.seedship_03_shoot_zone_lux
     - sensor.seedship_04_shoot_zone_lux
     - sensor.seedship_05_shoot_zone_lux
