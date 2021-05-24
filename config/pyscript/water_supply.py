@@ -15,7 +15,7 @@ def add_entity_to_list_var(entity=None, list_var=None, postfix=None):
     if not entities:
         entities = []
 
-    entity = re.sub(f".*\.(.*){ postfix }", "\\1", entity )
+    entity = re.sub(f"(.*)\.(.*){ postfix }", "\\1.\\2", entity )
 
     if entity in entities:
         entities.remove(entity)
@@ -23,7 +23,6 @@ def add_entity_to_list_var(entity=None, list_var=None, postfix=None):
         entities = entities + [entity]
 
     state.setattr(f'{ var_entity }.{ list_var }', json.dumps( entities ) )
-    #log.warning(f"{ entities }")
 
 @service
 def send_state_to_entities_list(list_var=None, topic=None, state_entity=None, numbers_only=False, retain=False):
@@ -87,4 +86,3 @@ def populate_unit_selectors():
     log.warning(f"options: { options }")
 
     input_select.set_options(entity_id="input_select.calibration_unit_selector", options=options)
-    input_select.set_options(entity_id="input_select.calibration_raw_unit_selector", options=["raw"] + options)

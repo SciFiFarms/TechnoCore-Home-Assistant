@@ -229,43 +229,35 @@ views:
             entities:
               - entity: input_text.calibration_manual_input
                 type: 'custom:text-input-row'
-              - type: call-service
-                name: ' '
+          - type: horizontal-stack
+            cards:
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: pyscript.clear_entities_list_var
+                  service_data:
+                    list_var: calibration_entities
+                icon: 'mdi:table-column-remove'
+                name: Clear Selected Sensors List
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: compensation.delete_datapoints
+                  service_data:
+                    entities_list: var.lists_of_entities
+                    entities_list_attribute: calibration_entities
+                icon: 'hass:delete'
+                name: Delete Datapoints
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: compensation.take_reading
+                  service_data:
+                    known_good_entity: input_select.calibration_good_sensor_selector
+                    entities_list: var.lists_of_entities
+                    entities_list_attribute: calibration_entities
                 icon: 'mdi:target-variant'
-                action_name: Take Calibration Reading
-                service: pyscript.calibration_reading
-                data_template:
-                  reading:
-                    '[object Object]': null
-      - type: vertical-stack
-        cards:
-          - type: 'custom:auto-entities'
-            card:
-              type: entities
-              title: Calibration Entities
-            filter:
-              include:
-                - entity_id: /.*_calibration$/
-                  options:
-                    style: |
-                      :host {
-                        --card-mod-icon-color:
-                        {% if 'this.entity_id'.replace('_calibration', '').replace("sensor.", "")  in state_attr('var.lists_of_entities', 'calibration_entities') %}
-                          green
-                        {% else %}
-                          red
-                        {% endif %}
-                        ;
-                      }
-                    tap_action:
-                      action: call-service
-                      service: pyscript.add_entity_to_list_var
-                      service_data:
-                        entity: this.entity_id
-                        list_var: calibration_entities
-                        postfix: _calibration
-            sort:
-              method: none
+                name: Take Calibration Reading
           - type: markdown
             content: >-
               {% set entities = state_attr('var.lists_of_entities',
@@ -274,24 +266,27 @@ views:
               {%- for entity in entities -%}
                     - {{ entity + "\n" }}
               {%- endfor %}
-            title: Currently Selected Calibration
+            title: Currently Selected Sensors
       - type: vertical-stack
         cards:
           - type: 'custom:auto-entities'
             card:
               type: entities
-              title: Raw Entities - Make postfix dynamic.
+              title: Calibrated Entities
             filter:
               template: >-
-                {% set data = namespace(entities=[]) %} {% set raw_entities =
-                "[]" if not state_attr('var.lists_of_entities', 'raw_entities')
-                else state_attr('var.lists_of_entities', 'raw_entities') %} {%
-                for ent in states.sensor
-                 | selectattr('attributes.unit_of_measurement', '==', states('input_select.calibration_unit_selector') )
+                {% set data = namespace(entities=[]) %}   {% set unit =
+                states('input_select.calibration_unit_selector') %} {% set
+                postfix = "" %}  {% set entities = "[]" if not
+                state_attr('var.lists_of_entities', 'calibration_entities') else
+                state_attr('var.lists_of_entities', 'calibration_entities') %}
+                {% for ent in states.sensor
+                 | selectattr('attributes.coefficients', 'defined')
+                 | selectattr('attributes.unit_of_measurement', '==', unit )
                  | list
                  | map(attribute='entity_id')
                 -%}
-                  {% if ent.replace('_raw', '').replace("sensor.", "") in raw_entities %}
+                  {% if ent.replace(postfix, '') in entities %}
                     {% set color = "green;" %}
                   {% else %}
                     {% set color = "red;" %}
@@ -304,20 +299,138 @@ views:
                                 'service': 'pyscript.add_entity_to_list_var',
                                 'service_data': {
                                   'entity': ent,
-                                  'list_var': 'raw_entities',
-                                  'postfix': '_raw'
+                                  'list_var': 'calibration_entities',
+                                  'postfix': postfix
+                                  }
+                                },
+                              }] -%}
+                {%- endfor -%} {{ data.entities }}
+              exclude: null
+            sort:
+              method: none
+          - type: button
+            tap_action:
+              action: toggle
+            entity: light.cube_shelf_light
+      - type: vertical-stack
+        cards:
+          - type: 'custom:auto-entities'
+            card:
+              type: entities
+              title: Raw Readings
+            filter:
+              template: >
+                {% set data = namespace(entities=[]) %}   {% set unit =
+                states('input_select.calibration_unit_selector') %} {% set
+                postfix = "" %}
+
+
+                {% set entities = "[]" if not
+                state_attr('var.lists_of_entities', 'calibration_entities') else
+                state_attr('var.lists_of_entities', 'calibration_entities') %}
+                {% for ent in states.sensor
+                 | selectattr('attributes.unit_of_measurement', '==', unit )
+                 | list
+                 | map(attribute='entity_id') if ent in entities
+                -%}
+                  {% if ent in entities %}
+                    {% set color = "green;" %}
+                  {% else %}
+                    {% set color = "red;" %}
+                  {% endif %}
+                  {% set style = ":host { --card-mod-icon-color: " + color + "}" %}
+                  {%- set data.entities = data.entities + [{'entity': state_attr(ent, "tracked_entity_id"),
+                              'style': style,
+                              'tap_action': {
+                                'action': 'call-service',
+                                'service': 'pyscript.add_entity_to_list_var',
+                                'service_data': {
+                                  'entity': ent,
+                                  'list_var': 'calibration_entities',
+                                  'postfix': postfix
                                   }
                                 },
                               }] -%}
                 {%- endfor -%} {{ data.entities }}
             sort:
               method: none
-          - type: markdown
-            content: >-
-              {% set entities = state_attr('var.lists_of_entities',
-              'raw_entities')  |from_json %}
+          - type: 'custom:auto-entities'
+            card:
+              type: entities
+              title: Base Readings
+            filter:
+              template: >
+                {% set data = namespace(entities=[]) %}   {% set unit =
+                states('input_select.calibration_unit_selector') %} {% set
+                postfix = "" %}
 
-              {%- for entity in entities -%}
-                    - {{ entity + "\n" }}
-              {%- endfor %}
-            title: Currently Selected Raw Sensors
+
+                {% set entities = "[]" if not
+                state_attr('var.lists_of_entities', 'calibration_entities') else
+                state_attr('var.lists_of_entities', 'calibration_entities') %}
+                {% for ent in states.sensor
+                 | selectattr('attributes.unit_of_measurement', '==', unit )
+                 | list
+                 | map(attribute='entity_id') if ent in entities
+                -%}
+                  {% if ent in entities %}
+                    {% set color = "green;" %}
+                  {% else %}
+                    {% set color = "red;" %}
+                  {% endif %}
+                  {% set style = ":host { --card-mod-icon-color: " + color + "}" %}
+                  {%- set data.entities = data.entities + [{'entity': state_attr(ent, "base_sensor"),
+                              'style': style,
+                              'tap_action': {
+                                'action': 'call-service',
+                                'service': 'pyscript.add_entity_to_list_var',
+                                'service_data': {
+                                  'entity': ent,
+                                  'list_var': 'calibration_entities',
+                                  'postfix': postfix
+                                  }
+                                },
+                              }] -%}
+                {%- endfor -%} {{ data.entities }}
+            sort:
+              method: none
+          - type: 'custom:auto-entities'
+            card:
+              type: entities
+              title: ESPHome Device Readings
+            filter:
+              template: >
+                {% set data = namespace(entities=[]) %}   {% set unit =
+                states('input_select.calibration_unit_selector') %} {% set
+                postfix = "" %}
+
+
+                {% set entities = "[]" if not
+                state_attr('var.lists_of_entities', 'calibration_entities') else
+                state_attr('var.lists_of_entities', 'calibration_entities') %}
+                {% for ent in states.sensor
+                 | selectattr('attributes.unit_of_measurement', '==', unit )
+                 | list
+                 | map(attribute='entity_id') if ent in entities
+                -%}
+                  {% if ent in entities %}
+                    {% set color = "green;" %}
+                  {% else %}
+                    {% set color = "red;" %}
+                  {% endif %}
+                  {% set style = ":host { --card-mod-icon-color: " + color + "}" %}
+                  {%- set data.entities = data.entities + [{'entity': state_attr(ent, "base_sensor"),
+                              'style': style,
+                              'tap_action': {
+                                'action': 'call-service',
+                                'service': 'pyscript.add_entity_to_list_var',
+                                'service_data': {
+                                  'entity': ent,
+                                  'list_var': 'calibration_entities',
+                                  'postfix': postfix
+                                  }
+                                },
+                              }] -%}
+                {%- endfor -%} {{ data.entities }}
+            sort:
+              method: none

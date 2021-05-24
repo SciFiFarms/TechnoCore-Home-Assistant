@@ -22,10 +22,6 @@ input_select:
     name: Calibration Good Sensor Selector
     options:
     - "raw"
-  calibration_raw_unit_selector:
-    name: Calibration Raw Unit Selector
-    options:
-    - "raw"
 
 input_text:
   calibration_manual_input:
