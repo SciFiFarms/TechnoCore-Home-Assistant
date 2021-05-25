@@ -6,7 +6,7 @@
 [subrepo]
 	remote = https://github.com/TheHackmeister/HomeAssistant.git
 	branch = master
-	commit = 89f3a570fa68e1afe4eb1a638bec8d87af6635f2
-	parent = 673806374bf683f7ba56ddd6e0cee9675f87f50b
+	commit = 01313d6c18c5899aeea5c0483369de1de506c9ee
+	parent = 07df6d103b93cd217ebd58d27b8c280856bc80c0
 	method = merge
 	cmdver = 0.4.0
