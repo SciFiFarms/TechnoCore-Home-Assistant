@@ -329,9 +329,9 @@ views:
                 state_attr('var.lists_of_entities', 'calibration_entities') else
                 state_attr('var.lists_of_entities', 'calibration_entities') %}
                 {% for ent in states.sensor
-                 | selectattr('attributes.unit_of_measurement', '==', unit )
-                 | list
-                 | map(attribute='entity_id') if ent in entities
+                  | selectattr('attributes.unit_of_measurement', '==', unit )
+                  | list
+                  | map(attribute='entity_id') if ent in entities and state_attr(ent, "tracked_entity_id") is not none
                 -%}
                   {% if ent in entities %}
                     {% set color = "green;" %}
@@ -369,9 +369,9 @@ views:
                 state_attr('var.lists_of_entities', 'calibration_entities') else
                 state_attr('var.lists_of_entities', 'calibration_entities') %}
                 {% for ent in states.sensor
-                 | selectattr('attributes.unit_of_measurement', '==', unit )
-                 | list
-                 | map(attribute='entity_id') if ent in entities
+                  | selectattr('attributes.unit_of_measurement', '==', unit )
+                  | list
+                  | map(attribute='entity_id') if ent in entities and state_attr(ent, "tracked_entity_id") is not none
                 -%}
                   {% if ent in entities %}
                     {% set color = "green;" %}
@@ -409,9 +409,9 @@ views:
                 state_attr('var.lists_of_entities', 'calibration_entities') else
                 state_attr('var.lists_of_entities', 'calibration_entities') %}
                 {% for ent in states.sensor
-                 | selectattr('attributes.unit_of_measurement', '==', unit )
-                 | list
-                 | map(attribute='entity_id') if ent in entities
+                  | selectattr('attributes.unit_of_measurement', '==', unit )
+                  | list
+                  | map(attribute='entity_id') if ent in entities and state_attr(ent, "tracked_entity_id") is not none
                 -%}
                   {% if ent in entities %}
                     {% set color = "green;" %}
