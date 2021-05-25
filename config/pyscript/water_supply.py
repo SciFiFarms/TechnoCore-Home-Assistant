@@ -78,6 +78,8 @@ def populate_good_calibration_sensors():
 def populate_unit_selectors():
     options = [" "]
     for entity_id in state.names():
+        if "coefficients" not in state.getattr(entity_id):
+            continue
         unit = state.getattr(entity_id).get("unit_of_measurement")
         if unit != None and not unit in options:
             options.append(unit)
