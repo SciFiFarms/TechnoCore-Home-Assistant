@@ -147,7 +147,7 @@ async def async_setup(hass, config):
         if len(entities_array) > 0:
             take_reading(hass, hass.states.get(hass.states.get(call.data["known_good_entity"]).state).state, entities_array)
 
-    hass.services.async_register(DOMAIN, "take_reading", async_take_reading) 
+    hass.services.async_register(DOMAIN, "take_reading", async_take_reading)
 
     @callback
     def async_delete_datapoints(call):
