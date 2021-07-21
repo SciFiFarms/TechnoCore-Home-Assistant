@@ -113,7 +113,7 @@ services:
     volumes:
       - ${TECHNOCORE_DATA}/home-assistant:/config/.storage
       - ${DEV_MOUNT_HOME_ASSISTANT_CONFIG:-$EMPTY_MOUNT}
-      - ${DEV_MOUNT_HOME_ASSISTANT_MIGRATIONS:-$EMPTY_MOUNT}
+      - ${DEV_MOUNT_HOME_ASSISTANT_MIGRATIONS:-$EMPTY_MOUNT_2}
 
   mqtt:
     secrets:
